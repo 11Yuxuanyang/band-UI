@@ -4,16 +4,17 @@
   "description": "A luxury-style health and fitness watch app UI",
   "main": "index.js",
   "scripts": {
-    "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
-    "build:ts": "npx tsc",
-    "build": "npm run build:css && npm run build:ts",
-    "watch": "npm run build && npx tsc -w & tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch"
+    "build": "echo 'Using Tailwind CDN - no build needed'",
+    "start": "npx http-server . -p 3000",
+    "vercel-build": "echo 'Static files ready for deployment'",
+    "dev": "npx http-server . -p 3000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@stagewise/toolbar": "^0.6.1",
+    "http-server": "^14.1.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4.1.11",
