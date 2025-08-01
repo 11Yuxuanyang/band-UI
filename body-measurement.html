@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身体测量 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Body measurement animation */
+        @keyframes bodyPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .body-pulse {
+            animation: bodyPulse 2.5s ease-in-out infinite;
+        }
+    </style>
+    <script type="module" src="src/main.js"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-gradient-to-b from-blue-800 via-gray-900/95 to-gray-900 rounded-[32px] overflow-hidden" style="background: linear-gradient(to bottom, #1e40af 0%, #1e40af 20%, #111827 40%, #111827 100%)">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">15:33</span>
+                    <div class="flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M15.385 6c-1.334-4.043-4.103-6-7.385-6-3.282 0-6.051 1.957-7.385 6h14.77zM12.615 7h-9.23c-1.045.968-1.785 2.559-1.785 4.385 0 2.828 2.239 5.115 5 5.115s5-2.287 5-5.115c0-1.826-.74-3.417-1.785-4.385z"/>
+                        </svg>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8.708 2.01a.5.5 0 0 0-.416 0l-6.364 4.5a.5.5 0 0 0 .416.99l1.416-.589v5.08a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-3.417a.5.5 0 0 1 .5-.5h2.334a.5.5 0 0 1 .5.5v3.417a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-5.08l1.416.59a.5.5 0 0 0 .416-.99z"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18M8 6h8M8 18h8"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Header with Back Button -->
+                <header class="px-4 pt-2 pb-4 flex items-center space-x-3">
+                    <a href="index.html" class="text-blue-400 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                    <span class="text-blue-400 text-lg">浏览</span>
+                </header>
+
+                <!-- Page Title -->
+                <div class="px-4 pb-6 flex justify-between items-center">
+                    <h1 class="text-4xl font-bold">身体测量</h1>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-blue-400 flex items-center justify-center">
+                             <span class="text-4xl font-bold text-white">22.5</span>
+                        </div>
+                         <p class="text-base text-white/80 mt-2">BMI</p>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 space-y-6 overflow-y-auto pb-24 no-scrollbar">
+                    <!-- Today Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">今天</h2>
+                        
+                        <!-- Body Measurement Cards -->
+                        <div class="space-y-3">
+                            <!-- 身高测量 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-blue-400 body-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <span class="text-blue-400 font-medium">身高测量</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">今天</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">当前身高</div>
+                                        <div class="text-3xl font-bold">175<span class="text-lg text-white/60 ml-1">cm</span></div>
+                                        <div class="text-sm text-green-400">标准</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="w-20 h-12 bg-black/20 rounded-lg p-2 flex items-center justify-center">
+                                            <svg class="w-full h-full text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2L12 22M8 6L12 2L16 6M8 18L12 22L16 18"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-xs text-white/40">身高标尺</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 体重测量 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-green-400 body-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2v20m-8-8h16"/>
+                                        </svg>
+                                        <span class="text-green-400 font-medium">体重测量</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">刚刚</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">当前体重</div>
+                                        <div class="text-3xl font-bold">69.2<span class="text-lg text-white/60 ml-1">kg</span></div>
+                                        <div class="text-sm text-green-400">正常范围</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="w-20 h-12 bg-black/20 rounded-lg p-2">
+                                            <svg class="w-full h-full" viewBox="0 0 80 40" fill="none">
+                                                <!-- Weight scale visualization -->
+                                                <rect x="10" y="25" width="60" height="10" fill="#10b981" rx="5"/>
+                                                <circle cx="45" cy="30" r="3" fill="#ffffff"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-xs text-white/40">体重秤</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BMI指数 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-purple-400 body-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-purple-400 font-medium">BMI指数</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">自动计算</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">身体质量指数</div>
+                                        <div class="text-3xl font-bold">22.5<span class="text-lg text-white/60 ml-1">kg/m²</span></div>
+                                        <div class="text-sm text-green-400">正常体重</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="relative w-16 h-16">
+                                            <svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 64 64">
+                                                <!-- Background circle -->
+                                                <circle cx="32" cy="32" r="28" stroke="#374151" stroke-width="4" fill="none"/>
+                                                <!-- Progress circle -->
+                                                <circle 
+                                                    cx="32" 
+                                                    cy="32" 
+                                                    r="28" 
+                                                    stroke="#8b5cf6" 
+                                                    stroke-width="4" 
+                                                    fill="none"
+                                                    stroke-dasharray="175.9"
+                                                    stroke-dashoffset="70"
+                                                    stroke-linecap="round"
+                                                />
+                                            </svg>
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <span class="text-sm font-bold text-purple-400">22.5</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-white/40">BMI圆环</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 体脂分析 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-orange-400 body-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                        <span class="text-orange-400 font-medium">体脂分析</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">15分钟前</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">体脂率</div>
+                                        <div class="text-3xl font-bold">15.8<span class="text-lg text-white/60 ml-1">%</span></div>
+                                        <div class="text-sm text-green-400">健康范围</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="w-20 h-12 bg-black/20 rounded-lg p-2">
+                                            <svg class="w-full h-full" viewBox="0 0 80 40" fill="none">
+                                                <!-- Body fat percentage visualization -->
+                                                <rect x="5" y="15" width="15" height="20" fill="#3b82f6" rx="2"/>
+                                                <rect x="25" y="10" width="15" height="25" fill="#10b981" rx="2"/>
+                                                <rect x="45" y="20" width="15" height="15" fill="#f59e0b" rx="2"/>
+                                                <rect x="65" y="25" width="10" height="10" fill="#ef4444" rx="2"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-xs text-white/40">体脂分布</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body Composition Analysis Section -->
+                    <div class="pt-6">
+                        <h2 class="text-2xl font-bold mb-4">身体成分分析</h2>
+                        <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                            <h3 class="text-lg font-bold text-white mb-3">详细指标</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-cyan-400">52.1kg</div>
+                                    <div class="text-sm text-white/60">肌肉量</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-400">38.2L</div>
+                                    <div class="text-sm text-white/60">体水分</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-yellow-400">3.2kg</div>
+                                    <div class="text-sm text-white/60">骨量</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red-400">1680</div>
+                                    <div class="text-sm text-white/60">基础代谢</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Body composition chart -->
+                            <div class="mt-6">
+                                <h4 class="text-md font-semibold text-white mb-3">成分比例</h4>
+                                <div class="flex justify-between items-end h-16">
+                                    <div class="flex flex-col items-center space-y-1">
+                                        <div class="w-8 h-12 bg-cyan-500 rounded-sm"></div>
+                                        <span class="text-xs text-white/60">肌肉</span>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-1">
+                                        <div class="w-8 h-8 bg-orange-500 rounded-sm"></div>
+                                        <span class="text-xs text-white/60">脂肪</span>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-1">
+                                        <div class="w-8 h-10 bg-blue-500 rounded-sm"></div>
+                                        <span class="text-xs text-white/60">水分</span>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-1">
+                                        <div class="w-8 h-6 bg-gray-400 rounded-sm"></div>
+                                        <span class="text-xs text-white/60">骨量</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Bottom Navigation -->
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                            <span>主屏幕</span>
+                        </a>
+                        <a href="measure.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            <span>测量</span>
+                        </a>
+                        <a href="achievements.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>达成</span>
+                        </a>
+                        <a href="share.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>分享</span>
+                        </a>
+                    </nav>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html> 

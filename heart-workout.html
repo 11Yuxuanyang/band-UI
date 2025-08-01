@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体能训练 - Withings App Clone</title>
+    <link rel="stylesheet" href="src/backup-styles.css"><link rel="stylesheet" href="src/styles.css">
+    <script type="module" src="src/main.js"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- App Header -->
+                <header class="px-4 pt-6 pb-4 flex justify-between items-center">
+                    <a href="heart-all-data.html" class="flex items-center space-x-1 text-withings-text-blue">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </a>
+                    <h1 class="text-lg font-semibold">体能训练</h1>
+                    <div></div> <!-- Spacer -->
+                </header>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 py-4 space-y-6">
+                    <div class="text-center py-8">
+                        <p class="text-6xl font-bold text-gray-500">--</p>
+                        <p class="text-xl text-gray-400">次/分</p>
+                    </div>
+                    
+                    <div class="bg-withings-card p-4 rounded-xl space-y-3">
+                        <h2 class="font-semibold text-lg">关于体能训练心率</h2>
+                        <p class="text-gray-300 leading-relaxed">
+                            此数据显示您在进行中高强度体能训练时的平均心率。要记录此数据，您需要在应用中或通过兼容设备手动开启一次“体能训练”活动。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            监控训练心率可以帮助您确保运动强度在有效的目标心率区内，从而最大化训练效果，无论是为了减脂、提高耐力还是增强心肺功能。
+                        </p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

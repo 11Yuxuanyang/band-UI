@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>呼吸详情</title>
+    <style>
+        :root {
+            --bg-color: #16191d;
+            --card-bg: #2c2f33;
+            --text-primary: #ffffff;
+            --text-secondary: #e5e5e5;
+            --text-tertiary: #a0a0a0;
+            --text-light: #888888;
+            --accent-green: #4caf50;
+            --accent-green-selected: #388e3c;
+            --link-blue: #8c9eff;
+            --border-color: #3a3a3a;
+            --range-low: #ff6b6b;
+            --range-normal: #4caf50;
+            --range-high: #ff9800;
+            --event-irregular: #ff81c7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem 0;
+        }
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: #111;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #444;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            border-radius: 32px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Navigation */
+        .header-nav {
+            padding: 10px 15px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--link-blue);
+            text-decoration: none;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .back-button:hover {
+            opacity: 0.8;
+        }
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .header-spacer {
+            width: 60px;
+        }
+        
+        .scroll-view {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .scroll-view::-webkit-scrollbar { display: none; }
+        .scroll-view { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Time Range Selector */
+        .time-range-container {
+            margin: 10px 15px;
+            padding: 4px;
+            background-color: #3a3a3a;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .time-range-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background-color: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .time-range-btn.active {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        /* RealTime Breathing */
+        .realtime-container {
+            margin: 20px 15px;
+            padding: 30px 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Circular Breathing Display */
+        .breathing-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            animation: breathingPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes breathingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .breathing-value { 
+            font-size: 36px; 
+            font-weight: bold; 
+            color: white; 
+            line-height: 1;
+        }
+        
+        .breathing-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+        }
+        
+        /* New Range Bar */
+        .range-bar-container { 
+            width: 100%; 
+            max-width: 320px;
+        }
+        
+        .range-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #ff6b6b 0%, #ff6b6b 25%, #4caf50 25%, #4caf50 75%, #ff9800 75%, #ff9800 100%);
+            position: relative;
+            margin: 15px 0;
+        }
+        
+        .range-pointer {
+            position: absolute;
+            top: -8px;
+            left: 50%; /* 15 breaths/min position on the scale */
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #333;
+        }
+        
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .range-categories {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .range-categories span:nth-child(1) { color: #ff6b6b; }
+        .range-categories span:nth-child(2) { color: #4caf50; }
+        .range-categories span:nth-child(3) { color: #ff9800; }
+        
+        /* Chart */
+        .chart-container {
+            margin: 0 15px;
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            height: 250px;
+            position: relative;
+        }
+        .chart-svg { width: 100%; height: 100%; }
+        .grid-line { stroke: #3a3a3a; stroke-width: 0.5; }
+        .axis-label { font-size: 12px; fill: var(--text-tertiary); }
+
+        /* Summary Cards */
+        .summary-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .summary-card {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .summary-card.active {
+            background-color: var(--accent-green-selected);
+        }
+        .summary-card.active .summary-label,
+        .summary-card.active .summary-value,
+        .summary-card.active .summary-unit {
+            color: white;
+        }
+        .summary-label { font-size: 16px; color: var(--text-primary); }
+        .summary-value { font-size: 20px; font-weight: bold; color: var(--text-primary); }
+        .summary-unit { font-size: 14px; color: var(--text-tertiary); margin-left: 4px; }
+        
+        /* Events Card */
+        .events-card {
+            margin: 10px 15px 20px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .events-title-container { display: flex; align-items: center; gap: 8px; }
+        .events-title { font-size: 20px; font-weight: bold; color: var(--text-secondary); }
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .event-label-container { display: flex; align-items: center; gap: 10px; }
+        .event-label { font-size: 18px; color: var(--text-secondary); }
+        .event-count { font-size: 20px; font-weight: bold; color: var(--text-secondary); }
+        .event-icon-small { width: 18px; height: 18px; }
+
+        /* Learn More Link */
+        .learn-more {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 16px;
+            color: var(--link-blue);
+            text-decoration: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-frame">
+        <div class="screen">
+            <div class="header-nav">
+                <a href="breathing-all-data.html" class="back-button">
+                    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19L5 12 12 5"/></svg>
+                    返回
+                </a>
+                <span class="page-title">呼吸详情</span>
+                <div class="header-spacer"></div>
+            </div>
+            <div class="scroll-view">
+                <div class="time-range-container"></div>
+                <div class="realtime-container">
+                    <div class="breathing-circle">
+                        <div class="breathing-value">15<span style="font-size: 20px;">/分</span></div>
+                        <div class="breathing-status">正常范围</div>
+                    </div>
+                    <div class="range-bar-container">
+                        <div class="range-labels">
+                            <span>8</span>
+                            <span>12</span>
+                            <span>20</span>
+                            <span>25</span>
+                        </div>
+                        <div class="range-bar">
+                            <div class="range-pointer"></div>
+                        </div>
+                        <div class="range-categories">
+                            <span>偏低</span>
+                            <span>正常</span>
+                            <span>偏高</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <svg class="chart-svg"></svg>
+                </div>
+                <div class="summary-container"></div>
+                <div class="events-card">
+                    <div class="events-header">
+                        <div class="events-title-container">
+                             <svg class="breathing-icon" style="width:22px; height:22px;" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/>
+                             </svg>
+                            <span class="events-title">呼吸事件通知</span>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-low);" viewBox="0 0 24 24">
+                                <path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/>
+                            </svg>
+                            <span class="event-label">呼吸偏慢事件</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-high);" viewBox="0 0 24 24">
+                                <path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/>
+                            </svg>
+                            <span class="event-label">呼吸急促事件</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--event-irregular);" viewBox="0 0 24 24">
+                                <path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/>
+                            </svg>
+                            <span class="event-label">呼吸不规律</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                </div>
+                <a href="#" class="learn-more">了解更多关于呼吸监测的信息</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const timeRanges = ['日', '周', '月', '年'];
+    const timeRangeContainer = document.querySelector('.time-range-container');
+    const svg = document.querySelector('.chart-svg');
+    const summaryContainer = document.querySelector('.summary-container');
+    const chartWidth = 350, chartHeight = 250;
+    const chartPadding = { top: 20, bottom: 20, left: 20, right: 20 };
+    const chartDrawableHeight = chartHeight - chartPadding.top - chartPadding.bottom;
+
+    let activeTimeRange = '日';
+    let selectedSummary = '';
+
+    const summaryData = [
+      { id: 'latest', label: '最新: 4:34', value: '15', unit: '次/分' },
+      { id: 'range', label: '呼吸范围', value: '12-20', unit: '次/分' },
+      { id: 'average', label: '平均呼吸', value: '16', unit: '次/分' },
+      { id: 'sleep', label: '睡眠呼吸', value: '14', unit: '次/分' },
+    ];
+
+    function getSleepBreathing(range) {
+        if (range === '日') return '14';
+        if (range === '周') return '13-15';
+        if (range === '月') return '13-16';
+        if (range === '年') return '12-16';
+    }
+
+    function updateBreathingDisplay(value, status) {
+        const breathingValueElement = document.querySelector('.breathing-value');
+        const breathingStatusElement = document.querySelector('.breathing-status');
+        const rangePointerElement = document.querySelector('.range-pointer');
+        const breathingCircle = document.querySelector('.breathing-circle');
+
+        breathingValueElement.innerHTML = `${value}<span style="font-size: 20px;">/分</span>`;
+        breathingStatusElement.textContent = status;
+        
+        // Update pointer position and circle color based on value
+        let pointerPosition = 50; // Default for 15 breaths/min
+        let circleColor = 'linear-gradient(135deg, #2e7d32, #4caf50)'; // Default green
+        
+        const numValue = parseInt(value);
+        if (numValue < 12) {
+            pointerPosition = 25;
+            circleColor = 'linear-gradient(135deg, #d32f2f, #ff6b6b)'; // Red for low
+        } else if (numValue >= 12 && numValue <= 20) {
+            pointerPosition = 50;
+            circleColor = 'linear-gradient(135deg, #2e7d32, #4caf50)'; // Green for normal
+        } else {
+            pointerPosition = 75;
+            circleColor = 'linear-gradient(135deg, #f57c00, #ff9800)'; // Orange for high
+        }
+        
+        rangePointerElement.style.left = `${pointerPosition}%`;
+        breathingCircle.style.background = circleColor;
+    }
+
+    function hideRangeIndicator() {
+        const rangeBarContainer = document.querySelector('.range-bar-container');
+        if (rangeBarContainer) {
+            rangeBarContainer.style.display = 'none';
+        }
+    }
+
+    function showRangeIndicator() {
+        const rangeBarContainer = document.querySelector('.range-bar-container');
+        if (rangeBarContainer) {
+            rangeBarContainer.style.display = 'block';
+        }
+    }
+
+    function renderTimeRanges() {
+        timeRangeContainer.innerHTML = '';
+        timeRanges.forEach(range => {
+            const btn = document.createElement('button');
+            btn.className = `time-range-btn ${activeTimeRange === range ? 'active' : ''}`;
+            btn.textContent = range;
+            btn.onclick = () => {
+                activeTimeRange = range;
+                renderTimeRanges();
+                renderChart();
+                renderSummaryCards();
+            };
+            timeRangeContainer.appendChild(btn);
+        });
+    }
+
+    function renderSummaryCards() {
+        summaryContainer.innerHTML = '';
+        const currentSummaryData = [...summaryData];
+        currentSummaryData[3].value = getSleepBreathing(activeTimeRange);
+
+        currentSummaryData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = `summary-card ${selectedSummary === item.id ? 'active' : ''}`;
+            card.innerHTML = `
+                <span class="summary-label">${item.label}</span>
+                <div>
+                    <span class="summary-value">${item.value}</span>
+                    <span class="summary-unit">${item.unit}</span>
+                </div>
+            `;
+            card.onclick = () => {
+                if (selectedSummary === item.id) {
+                    selectedSummary = '';
+                    updateBreathingDisplay('15', '正常范围');
+                    showRangeIndicator();
+                } else {
+                    selectedSummary = item.id;
+                    const displayValue = item.value.split('-')[0] || item.value;
+                    let status = '正常范围';
+                    
+                    if (item.id === 'average') status = '平均呼吸';
+                    else if (item.id === 'sleep') status = '睡眠呼吸';
+                    else if (item.id === 'range') status = '呼吸范围';
+                    
+                    updateBreathingDisplay(displayValue, status);
+                    
+                    if (item.id === 'average' || item.id === 'sleep') {
+                        hideRangeIndicator();
+                    } else {
+                        showRangeIndicator();
+                    }
+                }
+                renderSummaryCards();
+                renderChart();
+            };
+            summaryContainer.appendChild(card);
+        });
+    }
+    
+    function generateChartData(range) {
+        let points = [];
+        let count = 0;
+        let minBase, minVar, maxBase, maxVar;
+
+        switch(range) {
+            case '日': count = 60; minBase=14; minVar=2; maxBase=18; maxVar=2; break;
+            case '周': count = 50; minBase=13; minVar=3; maxBase=19; maxVar=2; break;
+            case '月': count = 70; minBase=13; minVar=3; maxBase=18; maxVar=3; break;
+            case '年': count = 80; minBase=12; minVar=4; maxBase=20; maxVar=2; break;
+        }
+        
+        // 生成呼吸数据点，主要在12-20次/分范围内
+        for (let i = 0; i < count; i++) {
+            const min = (minBase - minVar) + Math.random() * (2 * minVar);
+            const max = (maxBase - maxVar) + Math.random() * (2 * maxVar);
+            points.push({
+                x: Math.random(),
+                y: Math.max(8, Math.min(25, min + Math.random() * (max - min)))
+            });
+        }
+        
+        // 少量异常呼吸数据点
+        const abnormalCount = Math.floor(count * 0.1);
+        for (let i = 0; i < abnormalCount; i++) {
+            const isHigh = Math.random() > 0.5;
+            points.push({
+                x: Math.random(),
+                y: isHigh ? 20 + Math.random() * 5 : 8 + Math.random() * 4
+            });
+        }
+        
+        return points;
+    }
+
+    function renderChart() {
+        svg.innerHTML = '';
+        const data = generateChartData(activeTimeRange);
+        
+        const yScale = (val) => chartHeight - chartPadding.bottom - ((val - 5) / 20) * chartDrawableHeight;
+        
+        // Grid lines and labels
+        const yLabels = [5, 10, 15, 20, 25];
+        yLabels.forEach(val => {
+            const y = yScale(val);
+            svg.innerHTML += `<line class="grid-line" x1="${chartPadding.left}" y1="${y}" x2="${chartWidth - chartPadding.right}" y2="${y}"></line>`;
+            svg.innerHTML += `<text class="axis-label" x="0" y="${y + 4}">${val}</text>`;
+        });
+        
+        const xLabels = {
+            '日': ['0时', '6时', '12时', '18时'],
+            '周': ['一', '二', '三', '四', '五', '六', '日'],
+            '月': ['1', '10', '20', '30'],
+            '年': ['1月', '3月', '6月', '9月', '12月']
+        }[activeTimeRange];
+        
+        xLabels.forEach((label, i) => {
+            const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+            svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight}" text-anchor="middle">${label}</text>`;
+        });
+
+        // Scatter plot points
+        const minData = Math.min(...data.map(d => d.y));
+        const maxData = Math.max(...data.map(d => d.y));
+
+        data.forEach(d => {
+            const x = chartPadding.left + d.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const y = yScale(d.y);
+            let color = 'var(--range-normal)'; // 默认绿色
+            
+            if (d.y < 12) {
+                color = 'var(--range-low)'; // 红色 - 呼吸偏慢
+            } else if (d.y >= 12 && d.y <= 20) {
+                color = 'var(--range-normal)'; // 绿色 - 正常呼吸
+            } else {
+                color = 'var(--range-high)'; // 橙色 - 呼吸急促
+            }
+            
+            let opacity = 1;
+            if (selectedSummary === 'range' && d.y !== minData && d.y !== maxData) {
+                opacity = 0.3;
+            }
+            
+            if (selectedSummary !== 'latest' && selectedSummary !== 'average' && selectedSummary !== 'sleep') {
+                 svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" opacity="${opacity}" />`;
+            }
+        });
+        
+        // Overlays for specific views
+        if (selectedSummary === 'range') {
+            const minPoint = data.reduce((prev, curr) => prev.y < curr.y ? prev : curr);
+            const maxPoint = data.reduce((prev, curr) => prev.y > curr.y ? prev : curr);
+            const minX = chartPadding.left + minPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const minY = yScale(minPoint.y);
+            const maxX = chartPadding.left + maxPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const maxY = yScale(maxPoint.y);
+            
+            svg.innerHTML += `<circle cx="${minX}" cy="${minY}" r="4" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${minX}" y="${minY - 10}" text-anchor="middle">最低 ${Math.round(minPoint.y)}</text>`;
+            svg.innerHTML += `<circle cx="${maxX}" cy="${maxY}" r="4" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${maxX}" y="${maxY - 10}" text-anchor="middle">最高 ${Math.round(maxPoint.y)}</text>`;
+        }
+        
+        if (selectedSummary === 'latest') {
+            const lastPoint = data[data.length - 1];
+            const x = chartPadding.left + lastPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const y = yScale(lastPoint.y);
+            svg.innerHTML += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${x}" y="${y - 12}" text-anchor="middle">最新 ${Math.round(lastPoint.y)}</text>`;
+        }
+        
+        // 平均呼吸横线/趋势图
+        if (selectedSummary === 'average') {
+            const averageBreathing = 16;
+            
+            if (activeTimeRange === '日') {
+                const lineY = yScale(averageBreathing);
+                const lineStartX = chartPadding.left;
+                const lineEndX = chartWidth - chartPadding.right;
+                
+                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="5,3" />`;
+                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#4fc3f7">平均呼吸 ${averageBreathing}</text>`;
+            } else {
+                const xLabels = {
+                    '周': ['一', '二', '三', '四', '五', '六', '日'],
+                    '月': ['1', '10', '20', '30'],
+                    '年': ['1月', '3月', '6月', '9月', '12月']
+                }[activeTimeRange];
+                
+                const trendPoints = [];
+                xLabels.forEach((label, i) => {
+                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+                    const variation = (Math.sin(i * 0.8) * 1.5) + (Math.random() - 0.5) * 1;
+                    const y = yScale(averageBreathing + variation);
+                    trendPoints.push({ x, y });
+                });
+                
+                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
+                for (let i = 1; i < trendPoints.length; i++) {
+                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
+                }
+                svg.innerHTML += `<path d="${pathD}" stroke="#4fc3f7" stroke-width="2" fill="none" />`;
+                
+                trendPoints.forEach(point => {
+                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#4fc3f7" />`;
+                });
+                
+                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#4fc3f7">平均呼吸趋势</text>`;
+            }
+        }
+        
+        // 睡眠呼吸横线/趋势图
+        if (selectedSummary === 'sleep') {
+            const sleepBreathing = 14;
+            
+            if (activeTimeRange === '日') {
+                const lineY = yScale(sleepBreathing);
+                const lineStartX = chartPadding.left;
+                const lineEndX = chartWidth - chartPadding.right;
+                
+                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#81c784" stroke-width="2" stroke-dasharray="5,3" />`;
+                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#81c784">睡眠呼吸 ${sleepBreathing}</text>`;
+            } else {
+                const xLabels = {
+                    '周': ['一', '二', '三', '四', '五', '六', '日'],
+                    '月': ['1', '10', '20', '30'],
+                    '年': ['1月', '3月', '6月', '9月', '12月']
+                }[activeTimeRange];
+                
+                const trendPoints = [];
+                xLabels.forEach((label, i) => {
+                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+                    const variation = (Math.sin(i * 0.6) * 1) + (Math.random() - 0.5) * 1;
+                    const y = yScale(sleepBreathing + variation);
+                    trendPoints.push({ x, y });
+                });
+                
+                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
+                for (let i = 1; i < trendPoints.length; i++) {
+                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
+                }
+                svg.innerHTML += `<path d="${pathD}" stroke="#81c784" stroke-width="2" fill="none" />`;
+                
+                trendPoints.forEach(point => {
+                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#81c784" />`;
+                });
+                
+                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#81c784">睡眠呼吸趋势</text>`;
+            }
+        }
+    }
+
+    renderTimeRanges();
+    renderSummaryCards();
+    renderChart();
+});
+</script>
+
+</body>
+</html> 
+ 
+ 

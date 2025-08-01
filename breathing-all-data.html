@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>呼吸 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                        'withings-green': '#22C55E',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        @keyframes breathing-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        
+        .breathing-icon {
+            animation: breathing-pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes wave-flow {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-20px); }
+        }
+        
+        .wave-flow {
+            animation: wave-flow 4s ease-in-out infinite;
+        }
+        
+        @keyframes oxygen-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        
+        .oxygen-icon {
+            animation: oxygen-pulse 2s ease-in-out infinite;
+        }
+        body {
+            background-color: #0d1a1e; /* Fallback */
+        }
+        .main-bg {
+            background: linear-gradient(to bottom, #166534 0%, #166534 20%, #111827 40%, #111827 100%) !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-gradient-to-b from-green-800 via-gray-900/95 to-gray-900 rounded-[32px] overflow-hidden main-bg">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">17:22</span>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="flex space-x-1">
+                            <div class="w-1 h-1 bg-white rounded-full"></div>
+                            <div class="w-1 h-1 bg-white rounded-full"></div>
+                            <div class="w-1 h-1 bg-white rounded-full"></div>
+                        </div>
+                        <span class="text-sm font-semibold">5G</span>
+                        <div class="w-6 h-3 border border-white rounded-sm">
+                            <div class="w-4 h-1.5 bg-white rounded-sm m-0.5"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header with Back Button -->
+                <header class="px-4 pt-2 pb-4 flex items-center space-x-3">
+                    <a href="index.html" class="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                </header>
+
+                <!-- Page Title & Score -->
+                <div class="px-4 pb-6 flex justify-between items-center">
+                    <h1 class="text-4xl font-bold">呼吸</h1>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-withings-green flex items-center justify-center breathing-icon">
+                             <span class="text-4xl font-bold text-white">15</span>
+                        </div>
+                         <p class="text-base text-white/80 mt-2">呼吸频率</p>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 space-y-6 overflow-y-auto pb-24 no-scrollbar">
+                    <!-- Today Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">今天</h2>
+                        
+                        <!-- Breathing Cards -->
+                        <div class="space-y-3">
+                            <!-- 呼吸检测 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors" onclick="window.location.href='breathing-detail.html'">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-withings-green" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/>
+                                        </svg>
+                                        <span class="text-withings-green font-medium">呼吸检测</span>
+                                    </div>
+                                    <button id="breathing-test-btn" class="bg-green-500 hover:bg-green-600 px-4 py-1.5 rounded-lg text-white text-sm font-medium transition-colors" onclick="event.stopPropagation();">
+                                        开始检测
+                                    </button>
+                                </div>
+                                <div class="mt-3 flex items-end justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">当前频率</div>
+                                        <div class="text-3xl font-bold">15<span class="text-lg text-white/60 ml-1">次/分</span></div>
+                                        <div class="text-sm text-green-400">正常范围 (12-20)</div>
+                                    </div>
+                                    <div class="flex items-center space-x-1 h-12">
+                                        <svg class="w-16 h-12" viewBox="0 0 64 48" fill="none">
+                                            <path class="wave-flow" d="M2 24 Q8 12, 16 24 T32 24 Q40 36, 48 24 T64 24" stroke="#22C55E" stroke-width="2" fill="none"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 血氧监测 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors" onclick="window.location.href='oxygen-all-data.html'">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/>
+                                        </svg>
+                                        <span class="text-blue-400 font-medium">血氧监测</span>
+                                    </div>
+                                    <button id="oxygen-test-btn" class="bg-blue-500 hover:bg-blue-600 px-4 py-1.5 rounded-lg text-white text-sm font-medium transition-colors" onclick="event.stopPropagation();">
+                                        开始检测
+                                    </button>
+                                </div>
+                                <div class="mt-3 flex items-end justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">当前血氧</div>
+                                        <div class="text-3xl font-bold">98<span class="text-lg text-white/60 ml-1">%</span></div>
+                                        <div class="text-sm text-blue-400">正常范围 (95-100%)</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <div class="w-20 h-12">
+                                            <svg class="w-full h-full" viewBox="0 0 80 40" fill="none">
+                                                <path d="M2 30L8 28L14 32L20 26L26 34L32 24L38 30L44 28L50 25L56 35L62 27L68 31L74 29L78 30" 
+                                                      stroke="#60A5FA" stroke-width="1.5" fill="none"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                            <span>主屏幕</span>
+                        </a>
+                        <a href="measure.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            <span>测量</span>
+                        </a>
+                        <a href="achievements.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>达成</span>
+                        </a>
+                        <a href="share.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>分享</span>
+                        </a>
+                    </nav>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            const breathingTestBtn = document.getElementById('breathing-test-btn');
+            const oxygenTestBtn = document.getElementById('oxygen-test-btn');
+            
+            if (breathingTestBtn) {
+                breathingTestBtn.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    this.textContent = '检测中...';
+                    this.disabled = true;
+                    this.classList.add('opacity-50');
+                    setTimeout(() => {
+                        this.textContent = '检测完成';
+                        this.classList.remove('opacity-50');
+                        setTimeout(() => {
+                            this.textContent = '开始检测';
+                            this.disabled = false;
+                        }, 2000);
+                    }, 3000);
+                });
+            }
+
+            if (oxygenTestBtn) {
+                oxygenTestBtn.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    this.textContent = '检测中...';
+                    this.disabled = true;
+                    this.classList.add('opacity-50');
+                    setTimeout(() => {
+                        this.textContent = '检测完成';
+                        this.classList.remove('opacity-50');
+                        setTimeout(() => {
+                            this.textContent = '开始检测';
+                            this.disabled = false;
+                        }, 2000);
+                    }, 3000);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

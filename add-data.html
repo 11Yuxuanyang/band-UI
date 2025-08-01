@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加数据 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span id="time" class="text-sm font-semibold">09:41</span>
+                    <div class="flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M15.385 6c-1.334-4.043-4.103-6-7.385-6-3.282 0-6.051 1.957-7.385 6h14.77zM12.615 7h-9.23c-1.045.968-1.785 2.559-1.785 4.385 0 2.828 2.239 5.115 5 5.115s5-2.287 5-5.115c0-1.826-.74-3.417-1.785-4.385z"/></svg>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8.708 2.01a.5.5 0 0 0-.416 0l-6.364 4.5a.5.5 0 0 0 .416.99l1.416-.589v5.08a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-3.417a.5.5 0 0 1 .5-.5h2.334a.5.5 0 0 1 .5.5v3.417a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-5.08l1.416.59a.5.5 0 0 0 .416-.99z"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18M8 6h8M8 18h8"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Header -->
+                <header class="px-4 pt-2 pb-4 flex justify-between items-center border-b border-gray-700/50">
+                    <a href="javascript:history.back()" class="text-withings-blue text-lg">取消</a>
+                    <h1 class="text-lg font-semibold">添加数据</h1>
+                    <div class="w-12"></div>
+                </header>
+
+                <!-- Main Content -->
+                <main id="data-categories" class="flex-1 px-4 py-6 space-y-4 overflow-y-auto no-scrollbar">
+                    <!-- Categories will be dynamically inserted here -->
+                </main>
+                
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg><span>主屏幕</span></a>
+                        <a href="measure.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg><span>测量</span></a>
+                        <a href="achievements.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>达成</span></a>
+                        <a href="share.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span>分享</span></a>
+                    </nav>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoriesContainer = document.getElementById('data-categories');
+            const urlParams = new URLSearchParams(window.location.search);
+            const from = urlParams.get('from') || 'heart'; // Default to heart
+
+            const dataCategories = {
+                heart: [
+                    { name: '心率', description: '测量当前心率', icon: 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z', color: 'pink' },
+                    { name: '静息心率', description: '安静状态下的心率', icon: 'M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H9V3H15.5L20.5 8H15V10H22L21 9M7 13C8.1 13 9 13.9 9 15S8.1 17 7 17 5 16.1 5 15 5.9 13 7 13M17 13C18.1 13 19 13.9 19 15S18.1 17 17 17 15 16.1 15 15 15.9 13 17 13', color: 'blue' },
+                    { name: '心电图 (ECG)', description: '记录心脏电活动', icon: 'M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z', color: 'indigo' }
+                ],
+                breathing: [
+                    { name: '呼吸频率', description: '每分钟的呼吸次数', icon: 'M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z', color: 'green' },
+                    { name: '血氧饱和度', description: '血液中氧气的含量', icon: 'M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z', color: 'blue' }
+                ],
+                sleep: [
+                    { name: '睡眠时长', description: '记录睡眠总时间', icon: 'M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8', color: 'indigo' },
+                    { name: '睡眠得分', description: '评估夜间睡眠质量', icon: 'M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z', color: 'yellow' }
+                ],
+                // Add other categories as needed
+            };
+
+            const categoriesToDisplay = dataCategories[from] || dataCategories['heart'];
+            categoriesToDisplay.forEach(cat => {
+                const card = `
+                    <div class="bg-withings-card p-4 rounded-xl flex items-center space-x-4 hover:bg-gray-700/50 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-${cat.color}-500/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-${cat.color}-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="${cat.icon}"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-white">${cat.name}</h3>
+                            <p class="text-sm text-gray-400">${cat.description}</p>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                `;
+                categoriesContainer.innerHTML += card;
+            });
+             // Update time every second
+            setInterval(() => {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.getElementById('time').textContent = `${hours}:${minutes}`;
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

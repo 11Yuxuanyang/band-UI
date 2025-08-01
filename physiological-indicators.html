@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生理指标 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Temperature pulse animation */
+        @keyframes tempPulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .temp-pulse {
+            animation: tempPulse 2s ease-in-out infinite;
+        }
+        
+        /* Blood pressure animation */
+        @keyframes bpPulse {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .bp-pulse {
+            animation: bpPulse 1.5s ease-in-out infinite;
+        }
+    </style>
+    <script type="module" src="src/main.js"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-gradient-to-b from-purple-800 via-gray-900/95 to-gray-900 rounded-[32px] overflow-hidden" style="background: linear-gradient(to bottom, #7c3aed 0%, #7c3aed 20%, #111827 40%, #111827 100%)">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">15:33</span>
+                    <div class="flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M15.385 6c-1.334-4.043-4.103-6-7.385-6-3.282 0-6.051 1.957-7.385 6h14.77zM12.615 7h-9.23c-1.045.968-1.785 2.559-1.785 4.385 0 2.828 2.239 5.115 5 5.115s5-2.287 5-5.115c0-1.826-.74-3.417-1.785-4.385z"/>
+                        </svg>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8.708 2.01a.5.5 0 0 0-.416 0l-6.364 4.5a.5.5 0 0 0 .416.99l1.416-.589v5.08a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-3.417a.5.5 0 0 1 .5-.5h2.334a.5.5 0 0 1 .5.5v3.417a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-5.08l1.416.59a.5.5 0 0 0 .416-.99z"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18M8 6h8M8 18h8"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Header with Back Button -->
+                <header class="px-4 pt-2 pb-4 flex items-center space-x-3">
+                    <a href="index.html" class="text-blue-400 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                    <span class="text-blue-400 text-lg">浏览</span>
+                </header>
+
+                <!-- Page Title -->
+                <div class="px-4 pb-6 flex justify-between items-center">
+                    <h1 class="text-4xl font-bold">生理指标</h1>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-purple-400 flex items-center justify-center">
+                             <span class="text-4xl font-bold text-white">92</span>
+                        </div>
+                         <p class="text-base text-white/80 mt-2">健康评分</p>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 space-y-6 overflow-y-auto pb-24 no-scrollbar">
+                    <!-- Today Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">今天</h2>
+                        
+                        <!-- Physiological Indicator Cards -->
+                        <div class="space-y-3">
+                            <!-- 体温监测 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors" onclick="window.location.href='temperature-detail.html'">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-orange-400 temp-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M15 13V5a3 3 0 0 0-6 0v8a5 5 0 0 0 6 0zM12 4a1 1 0 0 1 1 1v8.18A3 3 0 1 1 11 13.18V5a1 1 0 0 1 1-1z"/>
+                                        </svg>
+                                        <span class="text-orange-400 font-medium">体温监测</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">15:26</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">体温</div>
+                                        <div class="text-3xl font-bold">36.8<span class="text-lg text-white/60 ml-1">°C</span></div>
+                                        <div class="text-sm text-green-400">正常</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-orange-300 h-6 rounded-full"></div>
+                                        <div class="w-1 bg-orange-400 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-orange-300 h-4 rounded-full"></div>
+                                        <div class="w-1 bg-orange-500 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-orange-400 h-7 rounded-full"></div>
+                                        <div class="w-1 bg-orange-600 h-12 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 血压检测 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors" onclick="window.location.href='blood-pressure-detail.html'">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-red-400 bp-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                        <span class="text-red-400 font-medium">血压检测</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">14:52</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">血压</div>
+                                        <div class="text-2xl font-bold">120<span class="text-lg text-white/60">/</span>80<span class="text-lg text-white/60 ml-1">mmHg</span></div>
+                                        <div class="text-sm text-green-400">正常</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-red-300 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-red-400 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-red-500 h-12 rounded-full"></div>
+                                        <div class="w-1 bg-red-400 h-9 rounded-full"></div>
+                                        <div class="w-1 bg-red-500 h-11 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AGEs指数/血糖 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                        <span class="text-yellow-400 font-medium">AGEs指数/血糖</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">13:15</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">血糖</div>
+                                        <div class="text-3xl font-bold">5.8<span class="text-lg text-white/60 ml-1">mmol/L</span></div>
+                                        <div class="text-sm text-green-400">正常</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-yellow-300 h-6 rounded-full"></div>
+                                        <div class="w-1 bg-yellow-400 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-yellow-500 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-yellow-400 h-7 rounded-full"></div>
+                                        <div class="w-1 bg-yellow-500 h-9 rounded-full"></div>
+                                        <div class="w-1 bg-yellow-600 h-12 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 甘油三酯 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-teal-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm4.3 14.3a1 1 0 01-1.41 1.41L12 14.83l-2.89 2.88a1 1 0 01-1.41-1.41L10.59 13.5 7.7 10.61a1 1 0 011.41-1.41L12 12.09l2.89-2.89a1 1 0 011.41 1.41L13.41 13.5l2.89 2.8z"/>
+                                        </svg>
+                                        <span class="text-teal-400 font-medium">甘油三酯</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">12:30</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">甘油三酯水平</div>
+                                        <div class="text-3xl font-bold">1.2<span class="text-lg text-white/60 ml-1">mmol/L</span></div>
+                                        <div class="text-sm text-green-400">正常</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-teal-300 h-7 rounded-full"></div>
+                                        <div class="w-1 bg-teal-400 h-9 rounded-full"></div>
+                                        <div class="w-1 bg-teal-500 h-6 rounded-full"></div>
+                                        <div class="w-1 bg-teal-400 h-11 rounded-full"></div>
+                                        <div class="w-1 bg-teal-500 h-8 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 尿酸 Card -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 cursor-pointer hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <span class="text-indigo-400 font-medium">尿酸</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">11:45</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">尿酸水平</div>
+                                        <div class="text-3xl font-bold">320<span class="text-lg text-white/60 ml-1">μmol/L</span></div>
+                                        <div class="text-sm text-green-400">正常</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-indigo-300 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-indigo-400 h-6 rounded-full"></div>
+                                        <div class="w-1 bg-indigo-500 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-indigo-400 h-7 rounded-full"></div>
+                                        <div class="w-1 bg-indigo-500 h-9 rounded-full"></div>
+                                        <div class="w-1 bg-indigo-600 h-12 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Past 30 Days Section -->
+                    <div class="pt-6">
+                        <h2 class="text-2xl font-bold mb-4">过去 30 天</h2>
+                        <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                            <h3 class="text-lg font-bold text-white mb-3">监测数据概览</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-orange-400">36.7°C</div>
+                                    <div class="text-sm text-white/60">平均体温</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red-400">118/76</div>
+                                    <div class="text-sm text-white/60">平均血压</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-yellow-400">5.6</div>
+                                    <div class="text-sm text-white/60">平均血糖</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-teal-400">1.1</div>
+                                    <div class="text-sm text-white/60">平均甘油三酯</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Bottom Navigation -->
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                            <span>主屏幕</span>
+                        </a>
+                        <a href="measure.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            <span>测量</span>
+                        </a>
+                        <a href="achievements.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>达成</span>
+                        </a>
+                        <a href="share.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>分享</span>
+                        </a>
+                    </nav>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html> 

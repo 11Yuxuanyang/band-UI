@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心电图 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-pink': '#e5528c',
+                        'withings-cyan': '#22d3ee',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes ecg-wave {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -300; }
+        }
+        .ecg-path-animated {
+            stroke-dasharray: 10 5;
+            animation: ecg-wave 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Header -->
+                <header class="px-5 pt-12 pb-5 flex justify-between items-center">
+                    <a href="heart.html" class="text-withings-blue text-3xl font-light">←</a>
+                    <h1 class="text-lg font-bold">心电图</h1>
+                    <button class="text-white text-3xl font-light">⋯</button>
+                </header>
+
+                <main class="flex-1 overflow-y-auto no-scrollbar px-4 space-y-5">
+                    <!-- Mode Toggle -->
+                    <div class="mode-toggle bg-withings-card p-1 rounded-lg flex">
+                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold bg-withings-blue text-white">测量</button>
+                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold text-gray-400">月</button>
+                    </div>
+
+                    <!-- DateTime Container -->
+                    <div class="date-time-container bg-withings-card rounded-lg flex justify-between items-center px-5 py-4">
+                        <button class="text-2xl text-gray-400">‹</button>
+                        <span class="font-semibold">2025/6/18 20:00</span>
+                        <button class="text-2xl text-gray-400">›</button>
+                    </div>
+
+                    <!-- Info Container -->
+                    <div class="info-container bg-withings-card rounded-lg flex justify-between px-5 py-4">
+                        <div class="status-container">
+                            <p class="text-sm text-gray-400 mb-2">状态</p>
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                <span class="font-medium">正常 窦性心律</span>
+                            </div>
+                        </div>
+                        <div class="heart-rate-container text-right">
+                            <p class="text-sm text-gray-400 mb-2">心率</p>
+                            <p class="text-xl font-bold">82 bpm</p>
+                        </div>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="chart-container bg-withings-card rounded-lg py-5">
+                        <svg height="200" width="100%" viewBox="0 0 350 200">
+                            <defs>
+                                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#374151" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                            <polyline fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                points="0,100 40,100 50,80 60,100 70,120 80,100 90,90 100,100 110,100 120,100 130,70 140,100 150,130 160,100 180,100 190,95 200,100 210,105 220,100 240,100 250,80 260,100 270,120 280,100 300,100 350,100" />
+                        </svg>
+                        <div class="time-scale flex justify-between px-5 mt-2 text-xs text-gray-400">
+                            <span>-1s</span>
+                            <span>0s</span>
+                            <span>1s</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">▶ 播放心电图</button>
+                    <button class="w-full bg-withings-blue hover:bg-blue-800 text-white font-bold py-3 rounded-lg transition-colors">▶ 测量心电图</button>
+
+                    <!-- Status Description -->
+                    <div class="status-description bg-withings-card rounded-lg p-5">
+                        <h3 class="font-bold mb-2">状态</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            此心电图未显示房颤（AFib）、心动过缓、心动过速的迹象。如果您感觉不适，请联系您的医生。
+                        </p>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

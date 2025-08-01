@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心脏 - Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom colors to match the app theme
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+    <script type="module" src="src/main.js"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-gradient-to-b from-red-800 via-gray-900/95 to-gray-900 rounded-[32px] overflow-hidden" style="background: linear-gradient(to bottom, #991b1b 0%, #991b1b 20%, #111827 40%, #111827 100%)">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">15:33</span>
+                    <div class="flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M15.385 6c-1.334-4.043-4.103-6-7.385-6-3.282 0-6.051 1.957-7.385 6h14.77zM12.615 7h-9.23c-1.045.968-1.785 2.559-1.785 4.385 0 2.828 2.239 5.115 5 5.115s5-2.287 5-5.115c0-1.826-.74-3.417-1.785-4.385z"/>
+                        </svg>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8.708 2.01a.5.5 0 0 0-.416 0l-6.364 4.5a.5.5 0 0 0 .416.99l1.416-.589v5.08a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-3.417a.5.5 0 0 1 .5-.5h2.334a.5.5 0 0 1 .5.5v3.417a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-5.08l1.416.59a.5.5 0 0 0 .416-.99z"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18M8 6h8M8 18h8"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Header with Back Button -->
+                <header class="px-4 pt-2 pb-4 flex items-center space-x-3">
+                    <a href="index.html" class="text-blue-400 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </a>
+                    <span class="text-blue-400 text-lg">浏览</span>
+                </header>
+
+                <!-- Page Title & Score -->
+                <div class="px-4 pb-6 flex justify-between items-center">
+                    <h1 class="text-4xl font-bold">心脏</h1>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full border-4 border-withings-green flex items-center justify-center">
+                             <span class="text-4xl font-bold text-white">95</span>
+                        </div>
+                         <p class="text-base text-white/80 mt-2">心脏评分</p>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 space-y-6 overflow-y-auto pb-24 no-scrollbar">
+                    <!-- Today Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">今天</h2>
+                        
+                        <!-- Heart Rate Cards -->
+                        <div class="space-y-3">
+                            <!-- 心率 Card -->
+                            <a href="heart-all-data.html" class="block bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                        </svg>
+                                        <span class="text-red-400 font-medium">心率</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">15:26</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">最新</div>
+                                        <div class="text-3xl font-bold">84<span class="text-lg text-white/60 ml-1">次/分</span></div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-white/30 h-6 rounded-full"></div>
+                                        <div class="w-1 bg-white/40 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-white/30 h-4 rounded-full"></div>
+                                        <div class="w-1 bg-white/50 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-white/40 h-7 rounded-full"></div>
+                                        <div class="w-1 bg-red-400 h-12 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- 心电 Card -->
+                            <a href="ecg-all-data.html" class="block bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10 hover:bg-black/50 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/>
+                                        </svg>
+                                        <span class="text-red-400 font-medium">心电</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-white/60 text-sm">15:26</span>
+                                        <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">最新</div>
+                                        <div class="text-lg font-bold text-green-400">正常 窦性心律</div>
+                                    </div>
+                                    <div class="flex items-end space-x-1 h-12">
+                                        <div class="w-1 bg-green-400/30 h-8 rounded-full"></div>
+                                        <div class="w-1 bg-green-400/40 h-10 rounded-full"></div>
+                                        <div class="w-1 bg-green-400/50 h-12 rounded-full"></div>
+                                        <div class="w-1 bg-green-400/40 h-9 rounded-full"></div>
+                                        <div class="w-1 bg-green-400 h-12 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- HRV 测试窗口 -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/>
+                                        </svg>
+                                        <span class="text-purple-400 font-medium">HRV 测试</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button id="hrv-test-btn" class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors">
+                                            开始测试
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">最新结果</div>
+                                        <div class="text-2xl font-bold">45.2<span class="text-lg text-white/60 ml-1">ms</span></div>
+                                        <div class="text-sm text-purple-400">压力指数: 中等</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <!-- HRV 波形图 -->
+                                        <div class="w-20 h-12 bg-black/20 rounded-lg p-2">
+                                            <svg class="w-full h-full" viewBox="0 0 80 40" fill="none">
+                                                <path d="M2 20L8 15L14 25L20 10L26 30L32 8L38 22L44 18L50 12L56 28L62 16L68 24L74 14L78 20" 
+                                                      stroke="#A855F7" stroke-width="1.5" fill="none"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-xs text-white/40">2分钟测试</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ECG 测试窗口 -->
+                            <div class="bg-black/40 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <svg class="w-5 h-5 text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/>
+                                        </svg>
+                                        <span class="text-cyan-400 font-medium">ECG 测试</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button id="ecg-test-btn" class="bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded-lg text-white text-sm font-medium transition-colors">
+                                            开始测试
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div class="text-white/60 text-sm mb-1">最新结果</div>
+                                        <div class="text-lg font-bold text-green-400">正常窦性心律</div>
+                                        <div class="text-sm text-cyan-400">心率: 72 次/分</div>
+                                    </div>
+                                    <div class="flex flex-col items-center space-y-2">
+                                        <!-- ECG 波形图 -->
+                                        <div class="w-20 h-12 bg-black/20 rounded-lg p-2">
+                                            <svg class="w-full h-full" viewBox="0 0 80 40" fill="none">
+                                                <path d="M2 20L6 20L8 5L10 35L12 20L16 20L18 15L20 25L22 20L26 20L28 5L30 35L32 20L36 20L38 15L40 25L42 20L46 20L48 5L50 35L52 20L56 20L58 15L60 25L62 20L66 20L68 5L70 35L72 20L76 20L78 20" 
+                                                      stroke="#06B6D4" stroke-width="1.5" fill="none"/>
+                                            </svg>
+                                        </div>
+                                        <div class="text-xs text-white/40">30秒测试</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <!-- Past 30 Days Section -->
+                    <div class="pt-6">
+                        <h2 class="text-2xl font-bold">过去 30 天</h2>
+                    </div>
+                </main>
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                            <span>主屏幕</span>
+                        </a>
+                        <a href="measure.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            <span>测量</span>
+                        </a>
+                        <a href="achievements.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>达成</span>
+                        </a>
+                        <a href="share.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>分享</span>
+                        </a>
+                    </nav>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

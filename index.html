@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withings App Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom colors to match the screenshot
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Hide scrollbar but keep scrolling functionality */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+        }
+        
+        /* Animated smart ball */
+        .smart-ball {
+            animation: float 3s ease-in-out infinite, moveAround 8s linear infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.1);
+            }
+        }
+        
+        @keyframes moveAround {
+            0% {
+                transform: translateX(0px) translateY(0px);
+            }
+            25% {
+                transform: translateX(15px) translateY(-5px);
+            }
+            50% {
+                transform: translateX(10px) translateY(5px);
+            }
+            75% {
+                transform: translateX(-5px) translateY(-3px);
+            }
+            100% {
+                transform: translateX(0px) translateY(0px);
+            }
+        }
+        
+        .smart-ball-glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 15px rgba(34, 211, 238, 0.6), 0 0 25px rgba(96, 165, 250, 0.4);
+            }
+            to {
+                box-shadow: 0 0 25px rgba(34, 211, 238, 0.9), 0 0 35px rgba(96, 165, 250, 0.6), 0 0 45px rgba(167, 139, 250, 0.3);
+            }
+        }
+        
+        .smart-ball-inner {
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script type="module" src="src/main.js"></script>
+</head>
+<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
+
+    <!-- iPhone Frame -->
+    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
+        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
+            <!-- App Screen -->
+            <div class="h-full flex flex-col text-white relative">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">09:39</span>
+                    <div class="flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                          <path d="M15.385 6c-1.334-4.043-4.103-6-7.385-6-3.282 0-6.051 1.957-7.385 6h14.77zM12.615 7h-9.23c-1.045.968-1.785 2.559-1.785 4.385 0 2.828 2.239 5.115 5 5.115s5-2.287 5-5.115c0-1.826-.74-3.417-1.785-4.385z"/>
+                        </svg>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><path d="M8.708 2.01a.5.5 0 0 0-.416 0l-6.364 4.5a.5.5 0 0 0 .416.99l1.416-.589v5.08a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-3.417a.5.5 0 0 1 .5-.5h2.334a.5.5 0 0 1 .5.5v3.417a.5.5 0 0 0 .5.5h1.916a.5.5 0 0 0 .5-.5v-5.08l1.416.59a.5.5 0 0 0 .416-.99z"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M3 14h18M8 6h8M8 18h8"></path></svg>
+                    </div>
+                </div>
+
+                <!-- App Header -->
+                <header class="px-4 pt-2 pb-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-withings-card rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+                        </div>
+                        <span class="text-lg">Hi, Jack</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                        <div class="w-7 h-7 bg-withings-card rounded-full flex items-center justify-center">
+                           <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 3.75-3.75V9.75A3.75 3.75 0 0 0 12 6c-2.071 0-3.75 1.679-3.75 3.75v4.5A3.75 3.75 0 0 0 12 18M12 18v2.25m0-16.5v2.25m-7.5 4.5h15m-15 0a9 9 0 0 0 15 0"/></svg>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class="flex-1 px-4 space-y-5 overflow-y-auto pb-24 no-scrollbar">
+                    <div class="space-y-1">
+                        <h1 class="text-4xl font-bold">Hi, Jack</h1>
+                    </div>
+                    
+
+
+                    <!-- Flusso AI Card -->
+                    <div class="relative overflow-hidden rounded-xl p-4 bg-gradient-to-br from-gray-900 to-black border border-gray-800 shadow-lg">
+                        <div class="absolute -top-1/2 -right-1/2 w-80 h-80 bg-gradient-to-br from-purple-600/20 via-cyan-500/10 to-transparent rounded-full opacity-50 animate-pulse"></div>
+                        <div class="relative z-10 flex items-center justify-between">
+                            <div class="flex-1 space-y-1">
+                                <h3 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                                    Flusso AI
+                                </h3>
+                                <p class="text-xs text-gray-400">您的个人健康洞察</p>
+                            </div>
+                            <div class="flex items-center justify-center w-16 h-16">
+                                <!-- Animated Smart Ball -->
+                                <div class="smart-ball smart-ball-glow relative">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 relative overflow-hidden border-2 border-white/20">
+                                        <!-- Rotating inner layer -->
+                                        <div class="smart-ball-inner absolute inset-0">
+                                            <div class="absolute inset-1 rounded-full bg-gradient-to-br from-white/40 to-transparent"></div>
+                                            <!-- Moving highlight -->
+                                            <div class="absolute top-2 left-2 w-3 h-3 rounded-full bg-white/90 shadow-lg"></div>
+                                            <!-- Secondary highlight -->
+                                            <div class="absolute bottom-2 right-2 w-1.5 h-1.5 rounded-full bg-cyan-200/80"></div>
+                                        </div>
+                                        <!-- Core glow -->
+                                        <div class="absolute inset-3 rounded-full bg-gradient-to-tr from-cyan-200/40 to-purple-200/40 animate-pulse"></div>
+                                        <!-- Outer ring -->
+                                        <div class="absolute -inset-1.5 rounded-full border border-cyan-400/30 animate-pulse"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Cards -->
+                    <div class="relative">
+                        <!-- Category Cards Header -->
+                        <div class="mb-3">
+                            <h2 class="text-lg font-semibold text-gray-300">健康分类</h2>
+                        </div>
+                        
+                        <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-2">
+                            <!-- Activity Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-withings-yellow/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-withings-yellow" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm text-withings-yellow">健康评分</span>
+                            </div>
+
+                            <!-- Breathing Card -->
+                            <a href="breathing-all-data.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12c0-2.5 2-4.5 4-4.5s4 2 4 4.5" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 12c0 2.5-2 4.5-4 4.5s-4-2-4-4.5" />
+                                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm text-blue-400">呼吸</span>
+                            </a>
+
+                            <!-- Heart Card -->
+                            <a href="heart.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-withings-pink/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-withings-pink" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg>
+                                </div>
+                                <span class="font-medium text-sm">心脏</span>
+                            </a>
+
+                            <!-- Sleep Card -->
+                            <a href="sleep.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8"/></svg>
+                                </div>
+                                <span class="font-medium text-sm">睡眠</span>
+                            </a>
+
+                            <!-- Physiological Indicators Card -->
+                            <a href="physiological-indicators.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">生理指标</span>
+                            </a>
+
+                            <!-- Body Measurement Card -->
+                            <a href="body-measurement.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">身体测量</span>
+                            </a>
+
+                            <!-- Fitness Records + Activity Card -->
+                            <a href="fitness-activity.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M6 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2M14 12c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2M2.5 4a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zm8 0a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">健身记录 + 活动能力</span>
+                            </a>
+
+                            <!-- Menstrual Tracking Card -->
+                            <a href="menstrual-tracking.html" class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-pink-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">经期跟踪</span>
+                            </a>
+
+                            <!-- Mental Health Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">心理健康</span>
+                            </div>
+
+                            <!-- Medication (Supplements) Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">用药（保健品）</span>
+                            </div>
+
+                            <!-- Nutrition Intake Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                                    </svg>
+                                </div>
+                                <span class="font-medium text-sm">营养摄入</span>
+                            </div>
+
+                            <!-- Weight Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443-.377-.443-.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48zm1 0c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 7.586 8.5 7.051 8.5 6.35z"/></svg>
+                                </div>
+                                <span class="font-medium text-sm">体重</span>
+                            </div>
+
+                            <!-- Environment Card -->
+                            <div class="bg-withings-card p-3 rounded-xl flex flex-col justify-between h-28 flex-shrink-0" style="width: 160px;">
+                                <div class="w-8 h-8 rounded-full bg-teal-500/20 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/></svg>
+                                </div>
+                                <span class="font-medium text-sm">环境</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Data Section -->
+                    <div id="health-data-cards" class="space-y-3 pt-4">
+                        <!-- Health Data Header -->
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold">所有健康数据</h2>
+                            <a href="add-data.html">
+                                <svg class="w-6 h-6 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </a>
+                        </div>
+                        <h3 class="text-gray-400 font-semibold">过去 7 天</h3>
+                        
+                        <!-- Daily Steps Card -->
+                        <div class="bg-withings-card p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-5 h-5 rounded-full bg-withings-yellow flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-black" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/></svg>
+                                    </div>
+                                    <span class="font-semibold">每日步数</span>
+                                </div>
+                                <span class="text-sm text-gray-400">09:29 &gt;</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-3xl font-bold">959</p>
+                                    <p class="text-sm text-gray-400">9 % 目标</p>
+                                </div>
+                                <div class="flex items-end space-x-0.5 h-8">
+                                    <div class="w-1 h-2 bg-gray-600 rounded-sm"></div>
+                                    <div class="w-1 h-3 bg-gray-600 rounded-sm"></div>
+                                    <div class="w-1 h-4 bg-gray-600 rounded-sm"></div>
+                                    <div class="w-1 h-3 bg-gray-600 rounded-sm"></div>
+                                    <div class="w-1 h-2 bg-gray-600 rounded-sm"></div>
+                                    <div class="w-1 h-5 bg-withings-blue rounded-sm"></div>
+                                    <div class="w-1 h-6 bg-withings-blue rounded-sm"></div>
+                                    <div class="w-1 h-4 bg-gray-600 rounded-sm"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Heart Rate Card -->
+                        <a href="heart-all-data.html" class="block hover:bg-gray-700/50 rounded-xl transition-colors">
+                            <div class="bg-withings-card p-4 rounded-xl">
+                                <div class="flex justify-between items-center mb-3">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-5 h-5 rounded-full bg-withings-pink flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg>
+                                        </div>
+                                        <span class="font-semibold">平均心率</span>
+                                    </div>
+                                    <span class="text-sm text-gray-400">09:29 &gt;</span>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div class="flex-shrink-0">
+                                        <p class="text-3xl font-bold">71 <span class="text-lg font-normal">bpm</span></p>
+                                        <p class="text-sm text-gray-400">正常</p>
+                                    </div>
+                                    <div class="flex-1 ml-4 space-y-2">
+                                        <!-- Heart Rate Range Indicator -->
+                                        <div class="relative">
+                                            <!-- Range Bar -->
+                                            <div class="h-3 rounded-full overflow-hidden flex">
+                                                <!-- Low Zone (Yellow) -->
+                                                <div class="bg-yellow-500 flex-1"></div>
+                                                <!-- Below Average Zone (Light Green) -->
+                                                <div class="bg-green-400 flex-1"></div>
+                                                <!-- Normal Zone (Dark Green) -->
+                                                <div class="bg-green-600 flex-1"></div>
+                                            </div>
+                                            <!-- Current Heart Rate Indicator -->
+                                            <div class="absolute -top-1 left-3/4 transform -translate-x-1/2">
+                                                <svg class="w-3 h-3 text-gray-300" viewBox="0 0 12 12" fill="currentColor">
+                                                    <path d="M6 0 L9 4 L3 4 Z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <!-- Range Labels -->
+                                        <div class="flex justify-between text-xs text-gray-400">
+                                            <span>低</span>
+                                            <span>低于平均值</span>
+                                            <span>正常</span>
+                                        </div>
+                                        <!-- Range Values -->
+                                        <div class="flex justify-between text-xs text-gray-500">
+                                            <span>60</span>
+                                            <span>75</span>
+                                            <span>90</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Sleep Oxygen Saturation Card -->
+                        <div class="bg-withings-card p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 3a5 5 0 0 1 5 5v1h-2V8a3 3 0 0 0-6 0v1H3V8a5 5 0 0 1 5-5"/></svg>
+                                    </div>
+                                    <span class="font-semibold">睡眠血氧饱和度（平均）</span>
+                                </div>
+                                <span class="text-sm text-gray-400">07:49 &gt;</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-3xl font-bold">98<span class="text-lg font-normal">%</span></p>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center">
+                                            <svg class="w-2 h-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/></svg>
+                                        </div>
+                                        <p class="text-sm text-gray-400">正常</p>
+                                    </div>
+                                </div>
+                                <div class="w-20 h-8 bg-gray-600 rounded"></div>
+                            </div>
+                        </div>
+
+                        <!-- Blood Oxygen Saturation Card -->
+                        <div class="bg-withings-card p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8 3a5 5 0 0 1 5 5v1h-2V8a3 3 0 0 0-6 0v1H3V8a5 5 0 0 1 5-5"/></svg>
+                                    </div>
+                                    <span class="font-semibold">血氧饱和度</span>
+                                </div>
+                                <span class="text-sm text-gray-400">07:49 &gt;</span>
+                            </div>
+                            <div>
+                                <p class="text-3xl font-bold">93<span class="text-lg font-normal">%</span></p>
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-3 h-3 rounded-full bg-green-500 flex items-center justify-center">
+                                        <svg class="w-2 h-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/></svg>
+                                    </div>
+                                    <p class="text-sm text-gray-400">低于平均值</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sleep Quality Card -->
+                        <div class="bg-withings-card p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center">
+                                        <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3z"/><path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5z"/></svg>
+                                    </div>
+                                    <span class="font-semibold">睡眠质量</span>
+                                </div>
+                                <span class="text-sm text-gray-400">07:49 &gt;</span>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <p class="text-3xl font-bold">7<span class="text-lg font-normal">小时</span>11</p>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500 flex items-center justify-center">
+                                            <span class="text-xs text-black font-bold">!</span>
+                                        </div>
+                                        <p class="text-sm text-gray-400">分数：59</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-end space-x-0.5 h-8">
+                                    <div class="w-2 h-4 bg-blue-300 rounded-sm"></div>
+                                    <div class="w-2 h-3 bg-blue-400 rounded-sm"></div>
+                                    <div class="w-2 h-5 bg-blue-500 rounded-sm"></div>
+                                    <div class="w-2 h-4 bg-blue-400 rounded-sm"></div>
+                                    <div class="w-2 h-6 bg-blue-600 rounded-sm"></div>
+                                    <div class="w-2 h-7 bg-blue-700 rounded-sm"></div>
+                                    <div class="w-2 h-8 bg-blue-800 rounded-sm"></div>
+                                    <div class="w-2 h-6 bg-blue-600 rounded-sm"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-3 pt-2">
+                            <div class="w-9 h-9 bg-withings-card rounded-full flex items-center justify-center">
+                                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                            </div>
+                            <span class="text-lg font-semibold text-withings-blue">添加记录</span>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Bottom Navigation Bar -->
+                <footer class="absolute bottom-0 left-0 w-full h-24 bg-withings-dark/80 backdrop-blur-sm border-t border-gray-700/50 flex justify-around items-start pt-3">
+                    <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                        <svg class="w-7 h-7 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L8.707 1.5z"/><path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/></svg>
+                        <span class="text-xs font-bold">主屏幕</span>
+                    </a>
+                    <a href="measure.html" class="text-center space-y-1 text-gray-400">
+                        <svg class="w-7 h-7 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M4 11H2V6h2zm4 0H6V2h2zm4 0h-2V4h2z"/></svg>
+                        <span class="text-xs font-semibold">测量</span>
+                    </a>
+                    <a href="achievements.html" class="text-center space-y-1 text-gray-400">
+                        <svg class="w-7 h-7 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                        <span class="text-xs font-semibold">达成</span>
+                    </a>
+                    <a href="share.html" class="text-center space-y-1 text-gray-400">
+                        <svg class="w-7 h-7 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm-5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-2 2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m12-3a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
+                        <span class="text-xs font-semibold">分享</span>
+                    </a>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var el = document.getElementById('health-data-cards');
+            var sortable = Sortable.create(el, {
+                animation: 150,
+                ghostClass: 'bg-gray-700'
+            });
+        });
+    </script>
+</body>
+</html> 

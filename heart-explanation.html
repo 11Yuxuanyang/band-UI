@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于心率 - Withings App Clone</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2.5rem 0;
+        }
+        
+        /* iPhone Frame */
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: #000;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 2px solid #374151;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            border-radius: 32px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            position: relative;
+        }
+        
+        /* Header */
+        .header {
+            padding: 1.5rem 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #5E87F5;
+            text-decoration: none;
+            font-size: 1.125rem;
+        }
+        
+        .title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .spacer {
+            width: 6rem;
+        }
+        
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .main-content::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .main-content {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: #2c2f33;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+        }
+        
+        .intro-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .intro-text {
+            color: #d1d5db;
+            line-height: 1.625;
+        }
+        
+        .source-link {
+            color: #5E87F5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        /* Visual card with gradient background */
+        .visual-card {
+            position: relative;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            height: 16rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.25rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .visual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23FF6B6B;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%234ECDC4;stop-opacity:0.1" /></linearGradient></defs><path d="M0,500 Q250,300 500,500 T1000,500 L1000,1000 L0,1000 Z" fill="url(%23grad)"/></svg>') center/cover;
+            opacity: 0.3;
+        }
+        
+        .visual-content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .visual-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+        
+        .visual-subtitle {
+            color: #d1d5db;
+        }
+        
+        /* Parameters section */
+        .params-section {
+            padding-top: 1rem;
+        }
+        
+        .params-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+        
+        .params-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .param-card {
+            background-color: #2c2f33;
+            padding: 1rem;
+            border-radius: 0.75rem;
+        }
+        
+        .param-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .param-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .param-icon.gray { background-color: rgba(107, 114, 128, 0.2); }
+        .param-icon.red { background-color: rgba(239, 68, 68, 0.2); }
+        .param-icon.yellow { background-color: rgba(245, 158, 11, 0.2); }
+        .param-icon.blue { background-color: rgba(59, 130, 246, 0.2); }
+        .param-icon.green { background-color: rgba(34, 197, 94, 0.2); }
+        
+        .param-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .param-title.gray { color: #d1d5db; }
+        .param-title.red { color: #f87171; }
+        .param-title.yellow { color: #fbbf24; }
+        .param-title.blue { color: #60a5fa; }
+        .param-title.green { color: #4ade80; }
+        
+        .param-description {
+            color: #d1d5db;
+            line-height: 1.625;
+            padding-left: 3rem;
+        }
+        
+        /* SVG Icons */
+        .icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        .icon-gray { color: #d1d5db; }
+        .icon-red { color: #f87171; }
+        .icon-yellow { color: #fbbf24; }
+        .icon-blue { color: #60a5fa; }
+        .icon-green { color: #4ade80; }
+    </style>
+    <script type="module" src="src/main.js"></script>
+</head>
+<body>
+    <!-- iPhone Frame -->
+    <div class="phone-frame">
+        <div class="screen">
+            <!-- App Header -->
+            <header class="header">
+                <a href="javascript:history.back()" class="back-btn">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                     <span>返回</span>
+                </a>
+                <h1 class="title">关于心率</h1>
+                <div class="spacer"></div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                
+                <div class="card intro-card">
+                    <p class="intro-text">
+                        心率用于测量心脏每分钟跳动的次数。为了维持正常机能，人体需要通过血液循环将氧气运送到体内各个部分，而心率正是反映这一生命体征效率的关键指标。
+                    </p>
+                    <p class="intro-text">
+                       通过分析心率数据，如静息心率和活动心率，可以帮助您评估心血管健康状况。
+                    </p>
+                    <a href="#" class="source-link">来源: Mayo Clinic</a>
+                </div>
+
+                <div class="visual-card">
+                    <div class="visual-content">
+                         <h2 class="visual-title">了解心率水平</h2>
+                         <p class="visual-subtitle">其含义及对健康的重要性。</p>
+                    </div>
+                </div>
+                
+                <!-- Parameter Explanations -->
+                <div class="params-section">
+                    <h2 class="params-title">参数详解</h2>
+                    <div class="params-list">
+                        <div class="param-card">
+                            <div class="param-header">
+                                <div class="param-icon gray">
+                                    <svg class="icon icon-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h-1.5m-15 0v11.25A2.25 2.25 0 006 16.5h2.25m13.5 0v-1.125c0-.621-.504-1.125-1.125-1.125H12.75" />
+                                    </svg>
+                                </div>
+                                <h3 class="param-title gray">心率图表</h3>
+                            </div>
+                            <p class="param-description">
+                               图表直观地展示了您在一天内心率的变化趋势。每个柱子代表一个时间段内的心率范围，让您可以轻松发现活动高峰和休息时段。
+                            </p>
+                        </div>
+
+                        <div class="param-card">
+                            <div class="param-header">
+                                <div class="param-icon red">
+                                    <svg class="icon icon-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="param-title red">最新</h3>
+                            </div>
+                            <p class="param-description">
+                                点击"最新"按钮会突出显示图表中最后一个数据柱，其他柱子会变暗，同时显示最新心率值的标记点。这让您能够快速关注到最近的心率数据。
+                            </p>
+                        </div>
+
+                        <div class="param-card">
+                            <div class="param-header">
+                                <div class="param-icon yellow">
+                                    <svg class="icon icon-yellow" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" />
+                                    </svg>
+                                </div>
+                                <h3 class="param-title yellow">范围</h3>
+                            </div>
+                            <p class="param-description">
+                                点击"范围"按钮会在图表上突出显示最高和最低心率值，其他柱子会变暗以便对比。同时会显示最大值和最小值的标记点，帮助您快速识别心率的波动范围。
+                            </p>
+                        </div>
+
+                        <div class="param-card">
+                            <div class="param-header">
+                                <div class="param-icon blue">
+                                   <svg class="icon icon-blue" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                                    </svg>
+                                </div>
+                                <h3 class="param-title blue">静息心率</h3>
+                            </div>
+                            <p class="param-description">
+                                点击"静息心率"按钮会在图表上显示一条蓝色虚线，标示您的静息心率水平。这条基准线可以帮助您直观地比较日常活动时的心率与静息状态的差异，按钮会变为红色表示已激活。
+                            </p>
+                        </div>
+
+                        <div class="param-card">
+                             <div class="param-header">
+                                <div class="param-icon green">
+                                   <svg class="icon icon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                    </svg>
+                                </div>
+                                <h3 class="param-title green">步行平均心率</h3>
+                            </div>
+                            <p class="param-description">
+                                点击"步行平均心率"按钮会在图表上显示一条绿色虚线，标示您步行时的平均心率水平。这条基准线让您能够快速识别哪些时段的心率接近或超过了步行强度，按钮同样会变红表示激活状态。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+</html> 
