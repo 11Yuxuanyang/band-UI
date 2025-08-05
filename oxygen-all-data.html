@@ -3,183 +3,384 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>血氧详情 - Withings App Clone</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'withings-dark': '#16191d',
-                        'withings-card': '#2c2f33',
-                        'withings-blue': '#6155f9',
-                        'withings-yellow': '#fcc049',
-                        'withings-purple': '#a092ed',
-                        'withings-pink': '#e5528c',
-                        'accent-blue-selected': '#1976d2',
-                    }
-                }
-            }
-        }
-    </script>
+    <title>血氧详情</title>
     <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        :root {
+            --bg-color: #16191d;
+            --card-bg: #2c2f33;
+            --text-primary: #ffffff;
+            --text-secondary: #e5e5e5;
+            --text-tertiary: #a0a0a0;
+            --text-light: #888888;
+            --accent-green: #4caf50;
+            --accent-green-selected: #388e3c;
+            --accent-blue: #2196f3;
+            --accent-blue-selected: #1976d2;
+            --link-blue: #8c9eff;
+            --border-color: #3a3a3a;
+            --range-low: #ff6b6b;
+            --range-normal: #4caf50;
+            --range-high: #ff9800;
+            --event-irregular: #ff81c7;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem 0;
+        }
+        .iphone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: #111;
+            border-radius: 40px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 2px solid #444;
+        }
+        .screen {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            border-radius: 32px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Navigation */
+        .header-nav {
+            padding: 10px 15px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--link-blue);
+            text-decoration: none;
+            font-size: 16px;
+            padding: 5px;
+        }
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .back-button:hover {
+            opacity: 0.8;
+        }
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .header-spacer {
+            width: 60px;
+        }
+        
+        .scroll-view {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .scroll-view::-webkit-scrollbar { display: none; }
+        .scroll-view { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Time Range Selector */
+        .time-range-container {
+            margin: 10px 15px;
+            padding: 4px;
+            background-color: #3a3a3a;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .time-range-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background-color: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .time-range-btn.active {
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        /* RealTime Oxygen */
+        .realtime-container {
+            margin: 20px 15px;
+            padding: 30px 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Circular Oxygen Display */
+        .oxygen-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1976d2, #2196f3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+            animation: oxygenPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes oxygenPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .oxygen-value { 
+            font-size: 36px; 
+            font-weight: bold; 
+            color: white; 
+            line-height: 1;
+        }
+        
+        .oxygen-status {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 4px;
+        }
+        
+        /* Range Bar */
+        .range-bar-container { 
+            width: 100%; 
+            max-width: 320px;
+        }
+        
+        .range-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #ff6b6b 0%, #ff6b6b 33%, #4caf50 33%, #4caf50 100%);
+            position: relative;
+            margin: 15px 0;
+        }
+        
+        .range-pointer {
+            position: absolute;
+            top: -8px;
+            left: 80%; /* 98% oxygen position on the scale */
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #333;
+        }
+        
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .range-categories {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .range-categories span:nth-child(1) { color: #ff6b6b; }
+        .range-categories span:nth-child(2) { color: #4caf50; }
+        
+        /* Chart */
+        .chart-container {
+            margin: 0 15px;
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            height: 250px;
+            position: relative;
+        }
+        .chart-svg { width: 100%; height: 100%; }
+        .grid-line { stroke: #3a3a3a; stroke-width: 0.5; }
+        .axis-label { font-size: 12px; fill: var(--text-tertiary); }
+
+        /* Summary Cards */
+        .summary-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .summary-card {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .summary-card.active {
+            background-color: var(--accent-green-selected);
+        }
+        .summary-card.active .summary-label,
+        .summary-card.active .summary-value,
+        .summary-card.active .summary-unit {
+            color: white;
+        }
+        .summary-label { font-size: 16px; color: var(--text-primary); }
+        .summary-value { font-size: 20px; font-weight: bold; color: var(--text-primary); }
+        .summary-unit { font-size: 14px; color: var(--text-tertiary); margin-left: 4px; }
+        
+        /* Events Card */
+        .events-card {
+            margin: 10px 15px 20px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .events-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .events-title-container { display: flex; align-items: center; gap: 8px; }
+        .events-title { font-size: 20px; font-weight: bold; color: var(--text-secondary); }
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .event-label-container { display: flex; align-items: center; gap: 10px; }
+        .event-label { font-size: 18px; color: var(--text-secondary); }
+        .event-count { font-size: 20px; font-weight: bold; color: var(--text-secondary); }
+        .event-icon-small { width: 18px; height: 18px; }
+
+        /* Learn More Link */
+        .learn-more {
+            text-align: center;
+            padding: 30px 0;
+            font-size: 16px;
+            color: var(--link-blue);
+            text-decoration: none;
+            display: block;
+        }
     </style>
 </head>
-<body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
-
-    <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
-        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
-            <div class="h-full flex flex-col text-white relative">
-                <!-- Status Bar -->
-                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
-                    <span id="time" class="text-sm font-semibold">17:22</span>
-                    <div class="flex items-center space-x-1.5">
-                        <div class="flex space-x-1"><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div></div>
-                        <span class="text-sm font-semibold">5G</span>
-                        <div class="w-6 h-3 border border-white rounded-sm"><div class="w-4 h-1.5 bg-white rounded-sm m-0.5"></div></div>
+<body>
+    <div class="iphone-frame">
+        <div class="screen">
+            <div class="header-nav">
+                <a href="breathing-all-data.html" class="back-button">
+                    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19L5 12 12 5"/></svg>
+                    返回
+                </a>
+                <span class="page-title">血氧详情</span>
+                <div class="header-spacer"></div>
+            </div>
+            <div class="scroll-view">
+                <div class="time-range-container"></div>
+                <div class="realtime-container">
+                    <div class="oxygen-circle">
+                        <div class="oxygen-value">98<span style="font-size: 20px;">%</span></div>
+                        <div class="oxygen-status">正常范围</div>
+                    </div>
+                    <div class="range-bar-container">
+                        <div class="range-labels">
+                            <span>90</span>
+                            <span>95</span>
+                            <span>100</span>
+                        </div>
+                        <div class="range-bar">
+                            <div class="range-pointer"></div>
+                        </div>
+                        <div class="range-categories">
+                            <span>偏低</span>
+                            <span>正常</span>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Header -->
-                <header class="px-4 pt-2 pb-4 flex justify-between items-center border-b border-gray-700/50">
-                    <a href="javascript:history.back()" class="flex items-center space-x-2 text-withings-blue">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                        <span>返回</span>
-                    </a>
-                    <h1 class="text-lg font-semibold">血氧详情</h1>
-                    <div class="w-20"></div>
-                </header>
-
-                <main class="flex-1 overflow-y-auto no-scrollbar">
-                    <!-- Time Range Selector -->
-                    <div class="px-4 pt-4">
-                        <div class="time-range-container flex justify-center bg-withings-card p-1 rounded-lg"></div>
-                    </div>
-
-                    <!-- Realtime Oxygen Display -->
-                    <div class="realtime-container p-6 flex flex-col items-center">
-                        <!-- Green Circle Display -->
-                        <div class="w-36 h-36 bg-green-500 rounded-full flex flex-col items-center justify-center text-white">
-                            <div class="text-4xl font-bold">15分</div>
-                            <div class="text-sm">正常范围</div>
-                        </div>
-                        
-                        <!-- Scale Bar -->
-                        <div class="w-full max-w-xs mt-8">
-                            <!-- Scale Numbers -->
-                            <div class="flex justify-between text-sm text-gray-300 mb-2">
-                                <span>8</span>
-                                <span>12</span>
-                                <span>20</span>
-                                <span>25</span>
-                            </div>
-                            
-                            <!-- Gradient Bar -->
-                            <div class="h-2 rounded-full bg-gradient-to-r from-red-500 via-green-500 to-orange-500 relative">
-                                <!-- Pointer -->
-                                <div class="absolute -top-3 left-[60%] transform -translate-x-1/2">
-                                    <div class="w-0 h-0 border-l-4 border-r-4 border-t-8 border-l-transparent border-r-transparent border-t-green-500"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Category Labels -->
-                            <div class="flex justify-between text-xs mt-2">
-                                <span class="text-red-400">偏低</span>
-                                <span class="text-green-400">正常</span>
-                                <span class="text-orange-400">偏高</span>
-                            </div>
+                <div class="chart-container">
+                    <svg class="chart-svg"></svg>
+                </div>
+                <div class="summary-container"></div>
+                <div class="events-card">
+                    <div class="events-header">
+                        <div class="events-title-container">
+                             <svg class="oxygen-icon" style="width:22px; height:22px; color: var(--accent-green);" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/>
+                             </svg>
+                            <span class="events-title">血氧事件通知</span>
                         </div>
                     </div>
-
-                    <!-- Chart -->
-                    <div class="chart-container mx-4 p-4 bg-withings-card rounded-xl h-64">
-                        <svg class="chart-svg w-full h-full"></svg>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-low);" viewBox="0 0 24 24">
+                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/>
+                            </svg>
+                            <span class="event-label">血氧偏低事件</span>
+                        </div>
+                        <span class="event-count">0</span>
                     </div>
-
-                    <!-- Summary Cards -->
-                    <div class="summary-container p-4 space-y-2">
-                        <div class="summary-card p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors bg-withings-card hover:bg-withings-card/80">
-                            <span class="text-sm">最新: 4:34</span>
-                            <div>
-                                <span class="font-bold">98</span>
-                                <span class="text-xs text-gray-400">%</span>
-                            </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-high);" viewBox="0 0 24 24">
+                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/>
+                            </svg>
+                            <span class="event-label">血氧不稳定</span>
                         </div>
-                        <div class="summary-card p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors bg-withings-card hover:bg-withings-card/80">
-                            <span class="text-sm">血氧范围</span>
-                            <div>
-                                <span class="font-bold">95-100</span>
-                                <span class="text-xs text-gray-400">%</span>
-                            </div>
-                        </div>
-                        <div class="summary-card p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors bg-withings-card hover:bg-withings-card/80">
-                            <span class="text-sm">日均血氧</span>
-                            <div>
-                                <span class="font-bold">97</span>
-                                <span class="text-xs text-gray-400">%</span>
-                            </div>
-                        </div>
-                        <div class="summary-card p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors bg-withings-card hover:bg-withings-card/80">
-                            <span class="text-sm">睡眠血氧</span>
-                            <div>
-                                <span class="font-bold">96</span>
-                                <span class="text-xs text-gray-400">%</span>
-                            </div>
-                        </div>
+                        <span class="event-count">0</span>
                     </div>
-                    
-                    <!-- Events Card -->
-                    <div class="events-card mx-4 p-4 bg-withings-card rounded-xl">
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center space-x-2">
-                               <svg class="w-5 h-5 text-withings-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/></svg>
-                               <span class="font-semibold">血氧事件通知</span>
-                            </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--event-irregular);" viewBox="0 0 24 24">
+                                <path d="M12 2C10.9 2 10 2.9 10 4C10 5.1 10.9 6 12 6C13.1 6 14 5.1 14 4C14 2.9 13.1 2 12 2ZM12 8C8.13 8 5 11.13 5 15C5 18.87 8.13 22 12 22C15.87 22 19 18.87 19 15C19 11.13 15.87 8 12 8ZM12 20C9.24 20 7 17.76 7 15C7 12.24 9.24 10 12 10C14.76 10 17 12.24 17 15C17 17.76 14.76 20 12 20Z"/>
+                            </svg>
+                            <span class="event-label">睡眠血氧异常</span>
                         </div>
-                        <div class="space-y-2">
-                            <div class="event-item flex justify-between items-center">
-                                <span class="text-sm text-gray-300">血氧偏低事件</span>
-                                <span class="font-bold">0</span>
-                            </div>
-                            <div class="event-item flex justify-between items-center">
-                                <span class="text-sm text-gray-300">血氧不稳定</span>
-                                <span class="font-bold">0</span>
-                            </div>
-                            <div class="event-item flex justify-between items-center">
-                                <span class="text-sm text-gray-300">睡眠血氧异常</span>
-                                <span class="font-bold">0</span>
-                            </div>
-                        </div>
+                        <span class="event-count">0</span>
                     </div>
-
-                    <!-- Learn More -->
-                    <a href="#" class="block text-center py-6 text-withings-blue">了解更多关于血氧的信息</a>
-
-                </main>
-                
-                <footer class="w-full bg-withings-dark/80 backdrop-blur-sm border-t border-gray-700/50">
-                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
-                        <a href="index.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg><span>主屏幕</span></a>
-                        <a href="measure.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg><span>测量</span></a>
-                        <a href="achievements.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg><span>达成</span></a>
-                        <a href="share.html" class="text-center space-y-1"><svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span>分享</span></a>
-                    </nav>
-                </footer>
+                </div>
+                <a href="#" class="learn-more">了解更多关于血氧监测的信息</a>
             </div>
         </div>
     </div>
-    
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const timeRanges = ['日', '周', '月', '年'];
     const timeRangeContainer = document.querySelector('.time-range-container');
     const svg = document.querySelector('.chart-svg');
     const summaryContainer = document.querySelector('.summary-container');
-    const chartWidth = 350;
-    const chartHeight = 250;
-    const chartPadding = { top: 20, bottom: 30, left: 30, right: 20 };
+    const chartWidth = 350, chartHeight = 250;
+    const chartPadding = { top: 20, bottom: 20, left: 20, right: 20 };
+    const chartDrawableHeight = chartHeight - chartPadding.top - chartPadding.bottom;
 
     let activeTimeRange = '日';
     let selectedSummary = '';
@@ -196,25 +397,53 @@ document.addEventListener('DOMContentLoaded', () => {
         if (range === '周') return '95-97';
         if (range === '月') return '95-98';
         if (range === '年') return '94-98';
-        return 'N/A';
     }
 
     function updateOxygenDisplay(value, status) {
-        // Since we now have a fixed display, we don't need to update dynamically
-        // The display now shows "15分" and "正常范围" as fixed values
-        console.log(`Display would show: ${value} - ${status}`);
+        const oxygenValueElement = document.querySelector('.oxygen-value');
+        const oxygenStatusElement = document.querySelector('.oxygen-status');
+        const rangePointerElement = document.querySelector('.range-pointer');
+        const oxygenCircle = document.querySelector('.oxygen-circle');
+
+        oxygenValueElement.innerHTML = `${value}<span style="font-size: 20px;">%</span>`;
+        oxygenStatusElement.textContent = status;
+        
+        // Update pointer position and circle color based on value
+        let pointerPosition = 80; // Default for 98%
+        let circleColor = 'linear-gradient(135deg, #1976d2, #2196f3)'; // Default blue
+        
+        const numValue = parseInt(value);
+        if (numValue < 95) {
+            pointerPosition = 25;
+            circleColor = 'linear-gradient(135deg, #d32f2f, #ff6b6b)'; // Red for low
+        } else if (numValue >= 95 && numValue <= 100) {
+            pointerPosition = 80;
+            circleColor = 'linear-gradient(135deg, #1976d2, #2196f3)'; // Blue for normal
+        }
+        
+        rangePointerElement.style.left = `${pointerPosition}%`;
+        oxygenCircle.style.background = circleColor;
     }
 
-    function toggleRangeIndicator(show) {
-        // Range indicator is now always visible with fixed styling
-        console.log(`Range indicator toggle: ${show}`);
+    function hideRangeIndicator() {
+        const rangeBarContainer = document.querySelector('.range-bar-container');
+        if (rangeBarContainer) {
+            rangeBarContainer.style.display = 'none';
+        }
+    }
+
+    function showRangeIndicator() {
+        const rangeBarContainer = document.querySelector('.range-bar-container');
+        if (rangeBarContainer) {
+            rangeBarContainer.style.display = 'block';
+        }
     }
 
     function renderTimeRanges() {
         timeRangeContainer.innerHTML = '';
         timeRanges.forEach(range => {
             const btn = document.createElement('button');
-            btn.className = `flex-1 py-2 text-sm font-semibold rounded-md transition-colors ${activeTimeRange === range ? 'bg-accent-blue-selected text-white' : 'text-gray-400 hover:bg-withings-card/50'}`;
+            btn.className = `time-range-btn ${activeTimeRange === range ? 'active' : ''}`;
             btn.textContent = range;
             btn.onclick = () => {
                 activeTimeRange = range;
@@ -233,20 +462,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentSummaryData.forEach(item => {
             const card = document.createElement('div');
-            card.className = `p-3 rounded-lg flex justify-between items-center cursor-pointer transition-colors ${selectedSummary === item.id ? 'bg-accent-blue-selected' : 'bg-withings-card hover:bg-withings-card/80'}`;
+            card.className = `summary-card ${selectedSummary === item.id ? 'active' : ''}`;
             card.innerHTML = `
-                <span class="text-sm">${item.label}</span>
+                <span class="summary-label">${item.label}</span>
                 <div>
-                    <span class="font-bold">${item.value}</span>
-                    <span class="text-xs text-gray-400">${item.unit}</span>
+                    <span class="summary-value">${item.value}</span>
+                    <span class="summary-unit">${item.unit}</span>
                 </div>
             `;
             card.onclick = () => {
-                selectedSummary = (selectedSummary === item.id) ? '' : item.id;
-                const displayValue = selectedSummary ? (item.value.split('-')[0] || item.value) : '98';
-                const status = selectedSummary ? (item.label.split(':')[0]) : '正常范围';
-                updateOxygenDisplay(displayValue, status);
-                toggleRangeIndicator(!selectedSummary || ['latest', 'range'].includes(selectedSummary));
+                if (selectedSummary === item.id) {
+                    selectedSummary = '';
+                    updateOxygenDisplay('98', '正常范围');
+                    showRangeIndicator();
+                } else {
+                    selectedSummary = item.id;
+                    const displayValue = item.value.split('-')[0] || item.value;
+                    let status = '正常范围';
+                    
+                    if (item.id === 'average') status = '日均血氧';
+                    else if (item.id === 'sleep') status = '睡眠血氧';
+                    else if (item.id === 'range') status = '血氧范围';
+                    
+                    updateOxygenDisplay(displayValue, status);
+                    
+                    if (item.id === 'average' || item.id === 'sleep') {
+                        hideRangeIndicator();
+                    } else {
+                        showRangeIndicator();
+                    }
+                }
                 renderSummaryCards();
                 renderChart();
             };
@@ -254,53 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    function renderChart() {
-        // Chart rendering logic remains similar but simplified
-        // All styling should be done via Tailwind classes where possible
-        // This is a placeholder for a more robust chart library or a more detailed SVG construction
-        const data = generateChartData(activeTimeRange);
-        svg.innerHTML = ''; // Clear previous chart
-
-        const chartDrawableWidth = chartWidth - chartPadding.left - chartPadding.right;
-        const chartDrawableHeight = chartHeight - chartPadding.top - chartPadding.bottom;
-
-        const yScale = (val) => chartPadding.top + ((100 - val) / 15) * chartDrawableHeight;
-
-        // Grid lines and labels
-        const yLabels = [85, 90, 95, 100];
-        yLabels.forEach(val => {
-            const y = yScale(val);
-            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            line.setAttribute('x1', chartPadding.left);
-            line.setAttribute('y1', y);
-            line.setAttribute('x2', chartWidth - chartPadding.right);
-            line.setAttribute('y2', y);
-            line.setAttribute('class', 'stroke-current text-gray-700');
-            svg.appendChild(line);
-
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', chartPadding.left - 8);
-            text.setAttribute('y', y + 4);
-            text.setAttribute('class', 'text-xs text-gray-400 text-right');
-            text.textContent = `${val}%`;
-            svg.appendChild(text);
-        });
-
-        // Scatter plot points
-        data.forEach(d => {
-            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            const x = chartPadding.left + d.x * chartDrawableWidth;
-            const y = yScale(d.y);
-            const colorClass = d.y < 95 ? 'text-red-500' : 'text-green-500';
-            
-            circle.setAttribute('cx', x);
-            circle.setAttribute('cy', y);
-            circle.setAttribute('r', 2.5);
-            circle.setAttribute('class', `fill-current ${colorClass}`);
-            svg.appendChild(circle);
-        });
-    }
-
     function generateChartData(range) {
         let points = [];
         let count = 0;
@@ -313,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case '年': count = 80; minBase=94; minVar=4; maxBase=100; maxVar=1; break;
         }
         
+        // 生成血氧数据点，主要在95-100%范围内
         for (let i = 0; i < count; i++) {
             const min = (minBase - minVar) + Math.random() * (2 * minVar);
             const max = (maxBase - maxVar) + Math.random() * (2 * maxVar);
@@ -322,14 +521,171 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        const lowOxygenCount = Math.floor(count * 0.05);
-        for (let i = 0; i < lowOxygenCount; i++) {
+        // 少量异常血氧数据点
+        const abnormalCount = Math.floor(count * 0.05);
+        for (let i = 0; i < abnormalCount; i++) {
             points.push({
                 x: Math.random(),
                 y: 90 + Math.random() * 5
             });
         }
+        
         return points;
+    }
+
+    function renderChart() {
+        svg.innerHTML = '';
+        const data = generateChartData(activeTimeRange);
+        
+        const yScale = (val) => chartHeight - chartPadding.bottom - ((val - 85) / 15) * chartDrawableHeight;
+        
+        // Grid lines and labels
+        const yLabels = [85, 90, 95, 100];
+        yLabels.forEach(val => {
+            const y = yScale(val);
+            svg.innerHTML += `<line class="grid-line" x1="${chartPadding.left}" y1="${y}" x2="${chartWidth - chartPadding.right}" y2="${y}"></line>`;
+            svg.innerHTML += `<text class="axis-label" x="0" y="${y + 4}">${val}</text>`;
+        });
+        
+        const xLabels = {
+            '日': ['0时', '6时', '12时', '18时'],
+            '周': ['一', '二', '三', '四', '五', '六', '日'],
+            '月': ['1', '10', '20', '30'],
+            '年': ['1月', '3月', '6月', '9月', '12月']
+        }[activeTimeRange];
+        
+        xLabels.forEach((label, i) => {
+            const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+            svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight}" text-anchor="middle">${label}</text>`;
+        });
+
+        // Scatter plot points
+        const minData = Math.min(...data.map(d => d.y));
+        const maxData = Math.max(...data.map(d => d.y));
+
+        data.forEach(d => {
+            const x = chartPadding.left + d.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const y = yScale(d.y);
+            let color = 'var(--range-normal)'; // 默认绿色
+            
+            if (d.y < 95) {
+                color = 'var(--range-low)'; // 红色 - 血氧偏低
+            } else if (d.y >= 95 && d.y <= 100) {
+                color = 'var(--range-normal)'; // 绿色 - 正常血氧
+            }
+            
+            let opacity = 1;
+            if (selectedSummary === 'range' && d.y !== minData && d.y !== maxData) {
+                opacity = 0.3;
+            }
+            
+            if (selectedSummary !== 'latest' && selectedSummary !== 'average' && selectedSummary !== 'sleep') {
+                 svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" opacity="${opacity}" />`;
+            }
+        });
+        
+        // Overlays for specific views
+        if (selectedSummary === 'range') {
+            const minPoint = data.reduce((prev, curr) => prev.y < curr.y ? prev : curr);
+            const maxPoint = data.reduce((prev, curr) => prev.y > curr.y ? prev : curr);
+            const minX = chartPadding.left + minPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const minY = yScale(minPoint.y);
+            const maxX = chartPadding.left + maxPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const maxY = yScale(maxPoint.y);
+            
+            svg.innerHTML += `<circle cx="${minX}" cy="${minY}" r="4" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${minX}" y="${minY - 10}" text-anchor="middle">最低 ${Math.round(minPoint.y)}</text>`;
+            svg.innerHTML += `<circle cx="${maxX}" cy="${maxY}" r="4" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${maxX}" y="${maxY - 10}" text-anchor="middle">最高 ${Math.round(maxPoint.y)}</text>`;
+        }
+        
+        if (selectedSummary === 'latest') {
+            const lastPoint = data[data.length - 1];
+            const x = chartPadding.left + lastPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
+            const y = yScale(lastPoint.y);
+            svg.innerHTML += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent-green)" />`;
+            svg.innerHTML += `<text class="axis-label" x="${x}" y="${y - 12}" text-anchor="middle">最新 ${Math.round(lastPoint.y)}</text>`;
+        }
+        
+        // 平均血氧横线/趋势图
+        if (selectedSummary === 'average') {
+            const averageOxygen = 97;
+            
+            if (activeTimeRange === '日') {
+                const lineY = yScale(averageOxygen);
+                const lineStartX = chartPadding.left;
+                const lineEndX = chartWidth - chartPadding.right;
+                
+                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="5,3" />`;
+                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#4fc3f7">平均血氧 ${averageOxygen}</text>`;
+            } else {
+                const xLabels = {
+                    '周': ['一', '二', '三', '四', '五', '六', '日'],
+                    '月': ['1', '10', '20', '30'],
+                    '年': ['1月', '3月', '6月', '9月', '12月']
+                }[activeTimeRange];
+                
+                const trendPoints = [];
+                xLabels.forEach((label, i) => {
+                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+                    const variation = (Math.sin(i * 0.8) * 1.5) + (Math.random() - 0.5) * 1;
+                    const y = yScale(averageOxygen + variation);
+                    trendPoints.push({ x, y });
+                });
+                
+                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
+                for (let i = 1; i < trendPoints.length; i++) {
+                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
+                }
+                svg.innerHTML += `<path d="${pathD}" stroke="#4fc3f7" stroke-width="2" fill="none" />`;
+                
+                trendPoints.forEach(point => {
+                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#4fc3f7" />`;
+                });
+                
+                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#4fc3f7">平均血氧趋势</text>`;
+            }
+        }
+        
+        // 睡眠血氧横线/趋势图
+        if (selectedSummary === 'sleep') {
+            const sleepOxygen = 96;
+            
+            if (activeTimeRange === '日') {
+                const lineY = yScale(sleepOxygen);
+                const lineStartX = chartPadding.left;
+                const lineEndX = chartWidth - chartPadding.right;
+                
+                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#81c784" stroke-width="2" stroke-dasharray="5,3" />`;
+                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#81c784">睡眠血氧 ${sleepOxygen}</text>`;
+            } else {
+                const xLabels = {
+                    '周': ['一', '二', '三', '四', '五', '六', '日'],
+                    '月': ['1', '10', '20', '30'],
+                    '年': ['1月', '3月', '6月', '9月', '12月']
+                }[activeTimeRange];
+                
+                const trendPoints = [];
+                xLabels.forEach((label, i) => {
+                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
+                    const variation = (Math.sin(i * 0.6) * 1) + (Math.random() - 0.5) * 1;
+                    const y = yScale(sleepOxygen + variation);
+                    trendPoints.push({ x, y });
+                });
+                
+                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
+                for (let i = 1; i < trendPoints.length; i++) {
+                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
+                }
+                svg.innerHTML += `<path d="${pathD}" stroke="#81c784" stroke-width="2" fill="none" />`;
+                
+                trendPoints.forEach(point => {
+                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#81c784" />`;
+                });
+                
+                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#81c784">睡眠血氧趋势</text>`;
+            }
+        }
     }
 
     renderTimeRanges();
@@ -337,5 +693,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderChart();
 });
 </script>
+
 </body>
 </html> 

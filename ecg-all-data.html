@@ -15,6 +15,7 @@
                         'withings-blue': '#6155f9',
                         'withings-pink': '#e5528c',
                         'withings-cyan': '#22d3ee',
+                        'withings-green': '#4caf50',
                     }
                 }
             }
@@ -32,11 +33,18 @@
             stroke-dasharray: 10 5;
             animation: ecg-wave 2s linear infinite;
         }
+        
+        body {
+            background-color: #333;
+        }
+        .main-bg {
+            background: linear-gradient(to bottom, #991b1b 0%, #991b1b 20%, #111827 40%, #111827 100%) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-800 flex items-center justify-center min-h-screen py-10">
     <div class="w-[375px] h-[812px] bg-black rounded-[40px] p-3 shadow-2xl border-2 border-gray-800">
-        <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
+        <div class="w-full h-full bg-gradient-to-b from-red-800 via-gray-900/95 to-gray-900 rounded-[32px] overflow-hidden" style="background: linear-gradient(to bottom, #991b1b 0%, #991b1b 20%, #111827 40%, #111827 100%)">
             <div class="h-full flex flex-col text-white relative">
                 <!-- Header -->
                 <header class="px-5 pt-12 pb-5 flex justify-between items-center">
@@ -45,37 +53,37 @@
                     <button class="text-white text-3xl font-light">⋯</button>
                 </header>
 
-                <main class="flex-1 overflow-y-auto no-scrollbar px-4 space-y-5">
+                <main class="flex-1 overflow-y-auto no-scrollbar px-4 space-y-5 pb-24">
                     <!-- Mode Toggle -->
-                    <div class="mode-toggle bg-withings-card p-1 rounded-lg flex">
-                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold bg-withings-blue text-white">测量</button>
-                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold text-gray-400">月</button>
+                    <div class="mode-toggle bg-black/40 backdrop-blur-sm border border-white/10 p-1 rounded-lg flex">
+                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold bg-withings-green text-white">测量</button>
+                        <button class="mode-button flex-1 py-2 rounded-md text-sm font-semibold text-white/60">月</button>
                     </div>
 
                     <!-- DateTime Container -->
-                    <div class="date-time-container bg-withings-card rounded-lg flex justify-between items-center px-5 py-4">
-                        <button class="text-2xl text-gray-400">‹</button>
-                        <span class="font-semibold">2025/6/18 20:00</span>
-                        <button class="text-2xl text-gray-400">›</button>
+                    <div class="date-time-container bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg flex justify-between items-center px-5 py-4">
+                        <button class="text-2xl text-white/60">‹</button>
+                        <span class="font-semibold text-white">2025/6/18 20:00</span>
+                        <button class="text-2xl text-white/60">›</button>
                     </div>
 
                     <!-- Info Container -->
-                    <div class="info-container bg-withings-card rounded-lg flex justify-between px-5 py-4">
+                    <div class="info-container bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg flex justify-between px-5 py-4">
                         <div class="status-container">
-                            <p class="text-sm text-gray-400 mb-2">状态</p>
+                            <p class="text-sm text-white/60 mb-2">状态</p>
                             <div class="flex items-center space-x-2">
-                                <svg class="w-6 h-6 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                                <span class="font-medium">正常 窦性心律</span>
+                                <svg class="w-6 h-6 text-withings-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                <span class="font-medium text-white">正常 窦性心律</span>
                             </div>
                         </div>
                         <div class="heart-rate-container text-right">
-                            <p class="text-sm text-gray-400 mb-2">心率</p>
-                            <p class="text-xl font-bold">82 bpm</p>
+                            <p class="text-sm text-white/60 mb-2">心率</p>
+                            <p class="text-xl font-bold text-white">82 bpm</p>
                         </div>
                     </div>
 
                     <!-- Chart Container -->
-                    <div class="chart-container bg-withings-card rounded-lg py-5">
+                    <div class="chart-container bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg py-5">
                         <svg height="200" width="100%" viewBox="0 0 350 200">
                             <defs>
                                 <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -86,7 +94,7 @@
                             <polyline fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                 points="0,100 40,100 50,80 60,100 70,120 80,100 90,90 100,100 110,100 120,100 130,70 140,100 150,130 160,100 180,100 190,95 200,100 210,105 220,100 240,100 250,80 260,100 270,120 280,100 300,100 350,100" />
                         </svg>
-                        <div class="time-scale flex justify-between px-5 mt-2 text-xs text-gray-400">
+                        <div class="time-scale flex justify-between px-5 mt-2 text-xs text-white/60">
                             <span>-1s</span>
                             <span>0s</span>
                             <span>1s</span>
@@ -94,17 +102,141 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">▶ 播放心电图</button>
+                    <button class="w-full bg-withings-green hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-colors">▶ 播放心电图</button>
                     <button class="w-full bg-withings-blue hover:bg-blue-800 text-white font-bold py-3 rounded-lg transition-colors">▶ 测量心电图</button>
 
                     <!-- Status Description -->
-                    <div class="status-description bg-withings-card rounded-lg p-5">
-                        <h3 class="font-bold mb-2">状态</h3>
-                        <p class="text-sm text-gray-300 leading-relaxed">
+                    <div class="status-description bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5">
+                        <h3 class="font-bold mb-2 text-white">状态</h3>
+                        <p class="text-sm text-white/80 leading-relaxed">
                             此心电图未显示房颤（AFib）、心动过缓、心动过速的迹象。如果您感觉不适，请联系您的医生。
                         </p>
                     </div>
+
+                    <!-- Health Diary Section -->
+                    <div class="section-container bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5">
+                        <h3 class="font-bold mb-4 text-white text-lg">健康日记</h3>
+                        <div class="time-entry text-white font-medium mb-4">20:00</div>
+                        <div class="health-entry flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-withings-green mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
+                                <span class="text-white">心电图</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-withings-green font-bold text-sm mr-2">正常</span>
+                                <span class="text-white/60 text-xl">›</span>
+                            </div>
+                        </div>
+                        <div class="action-buttons flex justify-between">
+                            <button class="add-log-button bg-transparent border border-withings-blue text-withings-blue py-3 px-8 rounded-full font-bold text-sm flex-1 mr-2">添加日志</button>
+                            <button class="explore-button bg-withings-blue text-white py-3 px-8 rounded-full font-bold text-sm flex-1 ml-2">探索</button>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Service Card -->
+                    <div class="clinical-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="doctor-badge bg-withings-green w-6 h-6 rounded-full flex justify-center items-center mr-3">
+                                <span class="text-white text-sm font-bold">M</span>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="text-white font-bold">Cardio Check-Up</h4>
+                                <p class="text-white/60 text-xs">心脏病专家在24小时内进行检查</p>
+                            </div>
+                        </div>
+                        <div class="doctor-avatar w-10 h-10 bg-white/20 rounded-full flex justify-center items-center">
+                            <span class="text-xl">👨🏾‍⚕️</span>
+                        </div>
+                    </div>
+
+                    <!-- Share Options -->
+                    <div class="section-container bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5">
+                        <h3 class="font-bold mb-4 text-white text-lg">分享选项</h3>
+                        <div class="share-options space-y-4">
+                            <div class="share-option flex justify-between items-center py-3 border-b border-white/10">
+                                <div class="flex items-center">
+                                    <span class="text-xl mr-3">📋</span>
+                                    <span class="text-white">分享 HealthLink</span>
+                                </div>
+                                <span class="text-white/60 text-xl">›</span>
+                            </div>
+                            <div class="share-option flex justify-between items-center py-3 border-b border-white/10">
+                                <div class="flex items-center">
+                                    <span class="text-xl mr-3">📄</span>
+                                    <span class="text-white">以 PDF 格式分享此测量结果</span>
+                                </div>
+                                <span class="text-white/60 text-xl">›</span>
+                            </div>
+                            <div class="share-option flex justify-between items-center py-3">
+                                <div class="flex items-center">
+                                    <span class="text-xl mr-3">📊</span>
+                                    <span class="text-white">分享完整的健康报告</span>
+                                </div>
+                                <span class="text-white/60 text-xl">›</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Section -->
+                    <div class="learn-more-section">
+                        <a href="#" class="learn-more-link text-withings-blue text-center block mb-4 underline">了解更多关于心电图的信息</a>
+                        <div class="info-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5 mb-4">
+                            <p class="text-white/80 text-sm leading-relaxed mb-3">
+                                心电图（ECG）是一种记录心脏电活动的测试。它可以帮助医生检测心脏问题，如心律不齐、心脏病发作等。
+                            </p>
+                            <p class="text-withings-blue text-sm">来源: 美国心脏协会</p>
+                        </div>
+                        <div class="info-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5 mb-4">
+                            <div class="h-32 bg-white/10 rounded-lg flex flex-col justify-end p-4 mb-3">
+                                <h4 class="text-white text-lg font-bold">心电图解读指南</h4>
+                                <p class="text-white/60 text-sm mt-2">了解如何解读心电图结果</p>
+                            </div>
+                            <p class="text-white/80 text-sm leading-relaxed mb-3">
+                                正常的心电图显示规则的窦性心律，心率在60-100次/分钟之间。任何异常都可能需要进一步检查。
+                            </p>
+                            <p class="text-withings-blue text-sm">来源: 心脏病学杂志</p>
+                        </div>
+                    </div>
+
+                    <!-- Details Section -->
+                    <div class="details-section">
+                        <h3 class="details-header font-bold text-white text-lg mb-3">参数详解</h3>
+                        <div class="details-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-center">
+                            <span class="text-2xl mr-3">📈</span>
+                            <span class="text-white font-medium">心电图分析</span>
+                        </div>
+                        <div class="details-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-center">
+                            <span class="text-2xl mr-3">❤️</span>
+                            <span class="text-white font-medium">心率变异性</span>
+                        </div>
+                        <div class="details-card bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-4 flex items-center">
+                            <span class="text-2xl mr-3">⚡</span>
+                            <span class="text-white font-medium">心律分析</span>
+                        </div>
+                    </div>
                 </main>
+
+                <!-- Footer -->
+                <footer class="w-full bg-withings-dark border-t border-gray-700/50 absolute bottom-0">
+                    <nav class="flex justify-around items-center h-20 text-xs text-gray-400">
+                        <a href="index.html" class="text-center space-y-1 text-withings-blue">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"/></svg>
+                            <span>主屏幕</span>
+                        </a>
+                        <a href="measure.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                            <span>测量</span>
+                        </a>
+                        <a href="achievements.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                            <span>达成</span>
+                        </a>
+                        <a href="share.html" class="text-center space-y-1">
+                            <svg class="w-7 h-7 mx-auto" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span>分享</span>
+                        </a>
+                    </nav>
+                </footer>
             </div>
         </div>
     </div>
