@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>测量 - Withings App Clone</title>
-    <link rel="stylesheet" href="src/backup-styles.css"><link rel="stylesheet" href="src/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -16,10 +32,20 @@
         <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
             <div class="h-full flex flex-col text-white relative">
                 
-                <header class="px-4 pt-10 pb-4 flex justify-between items-center border-b border-gray-700/50">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">15:33</span>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="flex space-x-1"><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div></div>
+                        <span class="text-sm font-semibold">5G</span>
+                        <div class="w-6 h-3 border border-white rounded-sm"><div class="w-4 h-1.5 bg-white rounded-sm m-0.5"></div></div>
+                    </div>
+                </div>
+
+                <header class="px-4 pt-2 pb-4 flex justify-between items-center border-b border-gray-700/50">
                     <h1 class="text-2xl font-bold">测量</h1>
-                    <a href="heart-add-data.html">
-                        <svg class="w-7 h-7 text-withings-text-blue" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                    <a href="heart-add-data.html" class="text-withings-blue">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                     </a>
                 </header>
 
@@ -27,21 +53,34 @@
                     <p class="text-gray-400">选择一个测量项目以开始。</p>
                     
                     <div class="space-y-3">
-                        <div class="bg-withings-card p-4 rounded-xl flex items-center space-x-4">
-                            <div class="w-10 h-10 rounded-full bg-withings-pink/20 flex items-center justify-center"><svg class="w-6 h-6 text-withings-pink" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+                        <a href="heart-all-data.html" class="block bg-withings-card p-4 rounded-xl flex items-center space-x-4 hover:bg-gray-700/50 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-withings-pink/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-withings-pink" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
                             <h3 class="font-semibold text-white flex-1">测量心率</h3>
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                        <div class="bg-withings-card p-4 rounded-xl flex items-center space-x-4">
-                            <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center"><svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/></svg></div>
+                        </a>
+                        <a href="ecg-all-data.html" class="block bg-withings-card p-4 rounded-xl flex items-center space-x-4 hover:bg-gray-700/50 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/></svg>
+                            </div>
                             <h3 class="font-semibold text-white flex-1">记录心电图 (ECG)</h3>
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                        <div class="bg-withings-card p-4 rounded-xl flex items-center space-x-4">
-                            <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center"><svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M18,11H13L15.5,6.5L9.5,17.5L11,13H6L12,7L18,11Z"/></svg></div>
+                        </a>
+                        <a href="oxygen-all-data.html" class="block bg-withings-card p-4 rounded-xl flex items-center space-x-4 hover:bg-gray-700/50 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M18,11H13L15.5,6.5L9.5,17.5L11,13H6L12,7L18,11Z"/></svg>
+                            </div>
                             <h3 class="font-semibold text-white flex-1">测量血氧 (SpO2)</h3>
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                        </div>
+                        </a>
+                        <a href="breathing-all-data.html" class="block bg-withings-card p-4 rounded-xl flex items-center space-x-4 hover:bg-gray-700/50 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12,3.5C12,3.5 8.5,6.5 8.5,12S12,20.5 12,20.5S15.5,17.5 15.5,12S12,3.5 12,3.5M12,6.5A5.5,5.5 0 0,1 17.5,12A5.5,5.5 0 0,1 12,17.5A5.5,5.5 0 0,1 6.5,12A5.5,5.5 0 0,1 12,6.5Z"/></svg>
+                            </div>
+                            <h3 class="font-semibold text-white flex-1">呼吸检测</h3>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
                     </div>
                 </main>
 

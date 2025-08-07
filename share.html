@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>分享 - Withings App Clone</title>
-    <link rel="stylesheet" href="src/backup-styles.css"><link rel="stylesheet" href="src/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'withings-dark': '#16191d',
+                        'withings-card': '#2c2f33',
+                        'withings-blue': '#6155f9',
+                        'withings-yellow': '#fcc049',
+                        'withings-purple': '#a092ed',
+                        'withings-pink': '#e5528c',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -16,7 +32,17 @@
         <div class="w-full h-full bg-withings-dark rounded-[32px] overflow-hidden">
             <div class="h-full flex flex-col text-white relative">
                 
-                <header class="px-4 pt-10 pb-4 border-b border-gray-700/50">
+                <!-- Status Bar -->
+                <div class="w-full h-10 px-6 flex justify-between items-center z-10">
+                    <span class="text-sm font-semibold">15:33</span>
+                    <div class="flex items-center space-x-1.5">
+                        <div class="flex space-x-1"><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div><div class="w-1 h-1 bg-white rounded-full"></div></div>
+                        <span class="text-sm font-semibold">5G</span>
+                        <div class="w-6 h-3 border border-white rounded-sm"><div class="w-4 h-1.5 bg-white rounded-sm m-0.5"></div></div>
+                    </div>
+                </div>
+
+                <header class="px-4 pt-2 pb-4 border-b border-gray-700/50">
                     <h1 class="text-2xl font-bold">分享</h1>
                 </header>
 
@@ -31,6 +57,33 @@
                     <button class="w-full bg-withings-blue text-white font-bold py-3 px-4 rounded-xl hover:bg-withings-blue/90 transition-colors">
                         生成健康报告
                     </button>
+
+                    <div class="w-full space-y-3">
+                        <h3 class="text-lg font-semibold text-left">分享选项</h3>
+                        <div class="space-y-2">
+                            <div class="bg-withings-card p-4 rounded-xl flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">📋</span>
+                                    <span class="text-sm">分享 HealthLink</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                            <div class="bg-withings-card p-4 rounded-xl flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">📄</span>
+                                    <span class="text-sm">以 PDF 格式分享此测量结果</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                            <div class="bg-withings-card p-4 rounded-xl flex items-center justify-between hover:bg-gray-700/50 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="text-2xl">📊</span>
+                                    <span class="text-sm">分享完整的健康报告</span>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </div>
+                        </div>
+                    </div>
                 </main>
 
                 <footer class="w-full bg-withings-dark border-t border-gray-700/50">

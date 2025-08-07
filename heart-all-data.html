@@ -61,15 +61,21 @@
         .back-button {
             display: flex;
             align-items: center;
-            gap: 5px;
-            color: var(--link-blue);
+            gap: 8px;
+            color: var(--text-primary);
             text-decoration: none;
             font-size: 16px;
-            padding: 5px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
         .back-button svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke: currentColor;
             stroke-width: 2;
             fill: none;
@@ -77,7 +83,10 @@
             stroke-linejoin: round;
         }
         .back-button:hover {
-            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
         .page-title {
             font-size: 18px;
@@ -148,32 +157,80 @@
         .heart-rate-label { color: var(--text-secondary); }
         .date-label { color: var(--text-light); margin-top: 4px; }
         
-        .range-bar-container { width: 160px; }
-        .range-pointer {
-            width: 20px;
-            height: 15px;
-            fill: var(--text-secondary);
-            margin-bottom: -2px;
+        .range-bar-container { 
+            width: 160px; 
+            height: 80px;
+            position: relative;
+            display: flex;
+            align-items: center;
         }
         .range-bar {
-            height: 12px;
-            border-radius: 6px;
+            height: 40px;
+            border-radius: 20px;
             display: flex;
             overflow: hidden;
-        }
-        .range-segment-slow { background-color: var(--range-slow); flex: 0.322; }
-        .range-segment-normal { background-color: var(--range-normal); flex: 0.444; }
-        .range-segment-fast { background-color: var(--range-fast); flex: 0.222; }
-        .range-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
+            width: 100%;
             position: relative;
         }
-        .range-labels span:nth-child(2) { position: absolute; left: 32.2%; transform: translateX(-50%);}
-        .range-labels span:nth-child(3) { position: absolute; left: 76.6%; transform: translateX(-50%);}
+        .range-pointer {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        .range-segment-slow { 
+            background-color: #FF0000; 
+            flex: 0.2; 
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        } /* 鲜红色 */
+        .range-segment-normal { 
+            background-color: #00FF00; 
+            flex: 0.4; 
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        } /* 鲜绿色 */
+        .range-segment-fast { 
+            background-color: #0080FF; 
+            flex: 0.3; 
+            position: relative;
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        } /* 鲜蓝色 */
+        .range-segment-extra { 
+            background-color: #8000FF; 
+            flex: 0.1; 
+            opacity: 0.3;
+            transition: all 0.3s ease;
+        } /* 鲜紫色 */
+        
+        /* 高亮样式 */
+        .range-segment-slow.highlight { 
+            background-color: #FF0000; 
+            opacity: 1; 
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        .range-segment-normal.highlight { 
+            background-color: #00FF00; 
+            opacity: 1; 
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        .range-segment-fast.highlight { 
+            background-color: #0080FF; 
+            opacity: 1; 
+            box-shadow: 0 0 10px rgba(0, 128, 255, 0.5);
+        }
+        .range-segment-extra.highlight { 
+            background-color: #8000FF; 
+            opacity: 1; 
+            box-shadow: 0 0 10px rgba(128, 0, 255, 0.5);
+        }
+
         
         /* Status Indicator */
         .status-indicator {
@@ -194,7 +251,7 @@
         /* Chart */
         .chart-container {
             margin: 0 15px;
-            padding: 10px 20px;
+            padding: 10px 20px 20px 20px;
             background-color: var(--card-bg);
             border-radius: 10px;
             height: 250px;
@@ -269,6 +326,769 @@
             text-decoration: none;
             display: block;
         }
+        
+        /* Bottom Sheet */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .bottom-sheet.active {
+            height: 70%;
+        }
+        
+        .sheet-content {
+            background-color: var(--bg-color);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            height: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sheet-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sheet-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sheet-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .more-data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .more-data-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .more-data-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ecg-entry {
+            border: 2px solid #007aff;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(0, 122, 255, 0.05));
+        }
+        
+        .ecg-entry:hover {
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.2), rgba(0, 122, 255, 0.1));
+            border-color: #0056cc;
+        }
+        
+        /* 心率数据界面样式 */
+        .heart-data-interface {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .ecg-entry-section {
+            margin: 20px 15px;
+        }
+        
+        .ecg-entry-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .ecg-entry-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ecg-entry-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .ecg-icon {
+            width: 40px;
+            height: 40px;
+            fill: #007aff;
+        }
+        
+        .ecg-text {
+            flex: 1;
+        }
+        
+        .ecg-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 4px;
+        }
+        
+        .ecg-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .ecg-arrow {
+            font-size: 20px;
+            color: #666;
+        }
+        
+        .more-data-card .summary-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .more-data-card .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .more-data-card .summary-unit {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+        
+        .more-data-card .heart-icon-small {
+            width: 30px;
+            height: 30px;
+            fill: var(--accent-red);
+            margin-bottom: 10px;
+        }
+        
+        .more-data-card .range-indicator {
+            width: 100%;
+            height: 8px;
+            background-color: #3a3a3a;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .more-data-card .range-segment {
+            height: 100%;
+            display: inline-block;
+        }
+        
+        .range-segment.slow { background-color: #FF0000; } /* 鲜红色 */
+        .range-segment.normal { background-color: #00FF00; } /* 鲜绿色 */
+        .range-segment.fast { background-color: #0080FF; } /* 鲜蓝色 */
+        
+        /* 心电图界面样式 */
+        .ecg-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            align-items: flex-end;
+        }
+        
+        .ecg-sheet.active {
+            display: flex;
+        }
+        
+        .ecg-content {
+            width: 100%;
+            height: 85%;
+            background: #2c2f33;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-top: 15%;
+        }
+        
+        .ecg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background: #2c2f33;
+            flex-shrink: 0;
+        }
+        
+        .ecg-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        
+        .ecg-done-btn {
+            font-size: 16px;
+            color: #007aff;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .time-range-selector {
+            display: flex;
+            background: #2c2f33;
+            margin: 0;
+            padding: 0;
+            border-top: 1px solid #3a3a3a;
+            flex-shrink: 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+        }
+        
+        .time-range-option {
+            flex: 1;
+            padding: 15px 8px;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-right: 1px solid #3a3a3a;
+            position: relative;
+        }
+        
+        .time-range-option:last-child {
+            border-right: none;
+        }
+        
+        .time-range-option.active {
+            background: #3a3a3a;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        
+        .ecg-scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 60px; /* 为底部时间选择器留出空间 */
+        }
+        
+        .ecg-scroll-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .ecg-scroll-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .ecg-scroll-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+        
+        .ecg-scroll-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .date-time-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 0 15px 20px;
+            background: #3a3a3a;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .nav-arrow {
+            font-size: 20px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        .date-time {
+            font-size: 16px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            margin: 0 15px 20px;
+            background: #3a3a3a;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .status-container {
+            flex: 1;
+        }
+        
+        .status-label {
+            color: #cccccc;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .status-value {
+            display: flex;
+            align-items: center;
+        }
+        
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+        }
+        
+        .heart-rate-container {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .heart-rate-label {
+            color: #cccccc;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .ecg-chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 15px 20px;
+            background: #3a3a3a;
+            border-radius: 10px;
+            padding: 20px 0;
+            flex-shrink: 0;
+        }
+        
+        .ecg-chart {
+            width: 350px;
+            height: 200px;
+        }
+        
+        .time-scale {
+            display: flex;
+            justify-content: space-between;
+            width: 350px;
+            padding: 0 20px;
+            margin-top: 10px;
+        }
+        
+        .time-scale span {
+            color: #cccccc;
+            font-size: 12px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 0 15px 20px;
+            flex-shrink: 0;
+        }
+        
+        .play-button, .measure-button {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .play-button {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .measure-button {
+            background: #007aff;
+            color: white;
+        }
+        
+        .status-description {
+            padding: 20px;
+            margin: 0 15px 20px;
+            background: white;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .status-description h3 {
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .status-description p {
+            color: #666;
+            font-size: 14px;
+            line-height: 20px;
+        }
+        
+        .section-container {
+            background: white;
+            margin: 0 15px 20px;
+            border-radius: 10px;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+        
+        .section-container h3 {
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .time-entry {
+            color: #333;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .health-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .health-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .health-left span {
+            color: #000;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        
+        .health-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-text {
+            color: #4caf50;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .arrow {
+            color: #666;
+            font-size: 20px;
+        }
+        
+        .action-buttons-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .add-log-button, .explore-button {
+            flex: 0.45;
+            padding: 12px 30px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .add-log-button {
+            background: white;
+            border: 1px solid #007aff;
+            color: #007aff;
+        }
+        
+        .explore-button {
+            background: #007aff;
+            border: none;
+            color: white;
+        }
+        
+        .clinical-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f0f0f5;
+            border-radius: 10px;
+        }
+        
+        .clinical-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .doctor-badge {
+            width: 25px;
+            height: 25px;
+            background: #4caf50;
+            border-radius: 12.5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .clinical-text {
+            margin-left: 10px;
+        }
+        
+        .clinical-title {
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .clinical-subtitle {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .doctor-avatar {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+        
+        .share-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 0.5px solid #eee;
+        }
+        
+        .share-option:last-child {
+            border-bottom: none;
+        }
+        
+        .share-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .share-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        
+        .share-left span:last-child {
+            color: #000;
+            font-size: 16px;
+        }
+        
+        .learn-more-section {
+            padding: 20px 15px;
+            flex-shrink: 0;
+        }
+        
+        .learn-more-link {
+            color: #007aff;
+            text-decoration: underline;
+            text-align: center;
+            display: block;
+            margin: 20px 0 10px;
+        }
+        
+        .info-card {
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .info-card p {
+            color: #333;
+            font-size: 15px;
+            line-height: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .info-source {
+            color: #007aff;
+            font-size: 14px;
+        }
+        
+        .details-section {
+            padding: 0 15px 20px;
+            flex-shrink: 0;
+        }
+        
+        .details-header {
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .details-card {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .details-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .details-text {
+            color: #000;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        /* 心电图界面滚动优化 */
+        .ecg-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .ecg-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .ecg-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        .ecg-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 更多按钮样式 */
+        .more-button {
+            background: #000 !important;
+            border: none !important;
+            text-align: center !important;
+            justify-content: center !important;
+            border-bottom: 1px solid #333 !important;
+        }
+        
+        .more-text {
+            color: #007aff;
+            font-size: 16px;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+        }
+        
+        .more-button:hover .more-text {
+            color: #0056cc;
+            text-shadow: 0 0 15px rgba(0, 122, 255, 0.5);
+        }
+        
+        /* 添加数据按钮样式 */
+        .add-data-section {
+            margin: 20px 15px;
+        }
+        
+        .add-data-button-large {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #007aff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 16px 20px;
+            background: rgba(0, 122, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .add-data-button-large svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        
+        .add-data-button-large:hover {
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 122, 255, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -283,29 +1103,27 @@
                 <div class="header-spacer"></div>
             </div>
             <div class="scroll-view">
-                <div class="time-range-container"></div>
                 <div class="realtime-container">
                     <div class="heart-rate-info">
                         <svg class="heart-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        <div class="heart-rate-value">85</div>
-                        <div class="heart-rate-label">实时心率 次/分</div>
-                        <div class="date-label">今天</div>
+                        <div class="heart-rate-value">78</div>
+                        <div class="heart-rate-label">心率 bpm</div>
+                        <div class="date-label">13:47</div>
                     </div>
                     <div class="range-bar-container">
-                        <svg class="range-pointer" viewBox="0 0 20 15"><polygon points="10,0 20,15 0,15"/></svg>
                         <div class="range-bar">
-                            <div class="range-segment-slow"></div>
-                            <div class="range-segment-normal"></div>
+                            <div class="range-pointer"></div>
+                            <div class="range-segment-extra"></div>
                             <div class="range-segment-fast"></div>
-                        </div>
-                        <div class="range-labels">
-                            <span>30</span><span>60</span><span>100</span>
+                            <div class="range-segment-normal"></div>
+                            <div class="range-segment-slow"></div>
                         </div>
                     </div>
                     <div class="status-indicator" style="display: none;">
                         <span class="status-text">正常</span>
                     </div>
                 </div>
+                <div class="time-range-container"></div>
                 <div class="chart-container">
                     <svg class="chart-svg"></svg>
                 </div>
@@ -347,29 +1165,86 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const timeRanges = ['日', '周', '月', '年'];
+    const timeRanges = ['日', '周', '月', '半年'];
     const timeRangeContainer = document.querySelector('.time-range-container');
     const svg = document.querySelector('.chart-svg');
     const summaryContainer = document.querySelector('.summary-container');
     const chartWidth = 350, chartHeight = 250;
-    const chartPadding = { top: 20, bottom: 20, left: 20, right: 20 };
+    const chartPadding = { top: 20, bottom: 30, left: 20, right: 20 };
     const chartDrawableHeight = chartHeight - chartPadding.top - chartPadding.bottom;
+
+    let currentChartData = []; // Store current chart data
+
+    // Add click event listener to the SVG chart
+    svg.addEventListener('click', (event) => {
+        const target = event.target;
+        
+        // Clear previous min/max labels
+        const existingLabels = svg.querySelectorAll('.min-max-label');
+        existingLabels.forEach(label => label.remove());
+
+        const createTextLabel = (x, y, text, anchor = 'middle') => {
+            const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textEl.setAttribute('x', x);
+            textEl.setAttribute('y', y);
+            textEl.setAttribute('class', 'min-max-label'); // Use a class for easy removal
+            textEl.setAttribute('text-anchor', anchor);
+            textEl.setAttribute('fill', 'white');
+            textEl.setAttribute('font-size', '12');
+            textEl.setAttribute('font-weight', 'bold');
+            textEl.textContent = text;
+            return textEl;
+        };
+
+        // Handle clicks on range bars (rect)
+        if (target.tagName === 'rect' && target.dataset.index) {
+            const index = parseInt(target.dataset.index, 10);
+            const pointData = currentChartData[index];
+            
+            if (pointData && typeof pointData.min !== 'undefined' && typeof pointData.max !== 'undefined') {
+                const x = parseFloat(target.getAttribute('x')) + parseFloat(target.getAttribute('width')) / 2;
+                const yMax = parseFloat(target.getAttribute('y'));
+                const yMin = yMax + parseFloat(target.getAttribute('height'));
+
+                // Display max and min values
+                const maxLabel = createTextLabel(x, yMax - 5, Math.round(pointData.max));
+                const minLabel = createTextLabel(x, yMin + 15, Math.round(pointData.min));
+                
+                svg.appendChild(maxLabel);
+                svg.appendChild(minLabel);
+            }
+        }
+        // Handle clicks on scatter points (circle)
+        else if (target.tagName === 'circle' && target.dataset.index) {
+            const index = parseInt(target.dataset.index, 10);
+            const pointData = currentChartData[index];
+
+            if (pointData && typeof pointData.y !== 'undefined') {
+                const x = parseFloat(target.getAttribute('cx'));
+                const y = parseFloat(target.getAttribute('cy'));
+                
+                // Display the value
+                const valueLabel = createTextLabel(x, y - 8, Math.round(pointData.y));
+                svg.appendChild(valueLabel);
+            }
+        }
+    });
 
     let activeTimeRange = '日';
     let selectedSummary = '';
 
     const summaryData = [
-      { id: 'latest', label: '最新: 4:34', value: '85', unit: '次/分' },
-      { id: 'range', label: '心率范围', value: '52-118', unit: '次/分' },
-      { id: 'resting', label: '静息心率', value: '53', unit: '次/分' },
-      { id: 'regular', label: '常规心率', value: '78', unit: '次/分' },
+      { id: 'latest', label: '最新: 4:34', value: '78', unit: 'bpm' },
+      { id: 'range', label: '心率范围', value: '52-118', unit: 'bpm' },
+      { id: 'resting', label: '静息心率', value: '53', unit: 'bpm' },
+      { id: 'regular', label: '常规心率', value: '78', unit: 'bpm' },
     ];
 
     function getRestingHeartRate(range) {
         if (range === '日') return '53';
         if (range === '周') return '48-55';
         if (range === '月') return '48-56';
-        if (range === '年') return '48-65';
+        if (range === '半年') return '48-65';
     }
 
     function updateHeartRateDisplay(value, label, date) {
@@ -380,6 +1255,28 @@ document.addEventListener('DOMContentLoaded', () => {
         heartRateValueElement.textContent = value;
         heartRateLabelElement.textContent = label;
         dateLabelElement.textContent = date;
+        
+        // 更新心率范围指示器位置和高亮显示
+        updateRangePointerPosition();
+        updateRangeHighlight(parseInt(value));
+    }
+
+    function updateRangeHighlight(heartRate) {
+        // 移除所有高亮
+        document.querySelectorAll('.range-segment-slow, .range-segment-normal, .range-segment-fast, .range-segment-extra').forEach(segment => {
+            segment.classList.remove('highlight');
+        });
+        
+        // 根据心率值确定高亮哪个段
+        if (heartRate < 60) {
+            document.querySelector('.range-segment-slow').classList.add('highlight');
+        } else if (heartRate < 100) {
+            document.querySelector('.range-segment-normal').classList.add('highlight');
+        } else if (heartRate < 130) {
+            document.querySelector('.range-segment-fast').classList.add('highlight');
+        } else {
+            document.querySelector('.range-segment-extra').classList.add('highlight');
+        }
     }
 
     function hideRangeIndicator() {
@@ -438,20 +1335,15 @@ document.addEventListener('DOMContentLoaded', () => {
             card.onclick = () => {
                 if (selectedSummary === item.id) {
                     selectedSummary = '';
-                    // 恢复原始实时心率显示
-                    updateHeartRateDisplay('85', '实时心率 次/分', '今天');
-                    // 恢复显示心率范围指示器
                     showRangeIndicator();
+                    updateHeartRateDisplay('78', '心率 bpm', '13:47');
                 } else {
                     selectedSummary = item.id;
-                    // 根据选择的项目更新显示
-                    if (item.id === 'resting' || item.id === 'regular') {
-                        updateHeartRateDisplay(item.value.split('-')[0] || item.value, item.label, '今天');
-                        // 隐藏心率范围指示器
-                        hideRangeIndicator();
+                    if (item.id !== 'range') {
+                       showRangeIndicator();
+                       updateHeartRateDisplay(item.value, item.label, '13:47');
                     } else {
-                        // 显示心率范围指示器
-                        showRangeIndicator();
+                       hideRangeIndicator();
                     }
                 }
                 renderSummaryCards();
@@ -459,227 +1351,868 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             summaryContainer.appendChild(card);
         });
+
+        const moreButton = document.createElement('div');
+        moreButton.className = 'summary-card more-button';
+        moreButton.innerHTML = `<span class="more-text">显示更多心率数据</span>`;
+        moreButton.onclick = () => showMoreDataInterface();
+        summaryContainer.appendChild(moreButton);
+    }
+
+    function showECGSheet() {
+        const sheet = document.getElementById('ecgSheet');
+        sheet.classList.add('active');
     }
     
-    function generateChartData(range) {
+    function showMoreDataSheet(moreData) {
+        const sheet = document.getElementById('moreDataSheet');
+        const container = document.getElementById('moreDataContainer');
+        
+        // 清空容器
+        container.innerHTML = '';
+        
+        // 创建完整的心率数据界面
+        const heartDataInterface = document.createElement('div');
+        heartDataInterface.className = 'heart-data-interface';
+        heartDataInterface.innerHTML = `
+            <!-- 导航栏 -->
+            <div class="header-nav">
+                <a href="#" class="back-button" onclick="closeMoreDataSheet()">
+                    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19L5 12 12 5"/></svg>
+                    返回
+                </a>
+                <span class="page-title">心率数据详情</span>
+                <div class="header-spacer"></div>
+            </div>
+            
+            <!-- 滚动内容 -->
+            <div class="scroll-view">
+                <!-- 实时心率区域 -->
+                <div class="realtime-container">
+                    <div class="heart-rate-info">
+                        <svg class="heart-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <div class="heart-rate-value">78</div>
+                        <div class="heart-rate-label">心率 bpm</div>
+                        <div class="date-label">13:47</div>
+                    </div>
+                    <div class="range-bar-container">
+                        <div class="range-bar">
+                            <div class="range-pointer"></div>
+                            <div class="range-segment-extra"></div>
+                            <div class="range-segment-fast"></div>
+                            <div class="range-segment-normal"></div>
+                            <div class="range-segment-slow"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 时间范围选择器 -->
+                <div class="time-range-container">
+                    <button class="time-range-btn active">日</button>
+                    <button class="time-range-btn">周</button>
+                    <button class="time-range-btn">月</button>
+                    <button class="time-range-btn">半年</button>
+                </div>
+                
+                <!-- 图表容器 -->
+                <div class="chart-container">
+                    <svg class="chart-svg"></svg>
+                </div>
+                
+                <!-- 数据摘要卡片 -->
+                <div class="summary-container"></div>
+                
+                <!-- 心电图入口 -->
+                <div class="ecg-entry-section">
+                    <div class="ecg-entry-card" onclick="openECGFromMoreData()">
+                        <div class="ecg-entry-content">
+                            <svg class="ecg-icon" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <div class="ecg-text">
+                                <div class="ecg-title">心电图分析</div>
+                                <div class="ecg-subtitle">查看详细的心电图数据和专业分析</div>
+                            </div>
+                            <div class="ecg-arrow">›</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 添加数据按钮 -->
+                <div class="add-data-section">
+                    <a href="heart-add-data.html" class="add-data-button-large">
+                        <svg viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+                        </svg>
+                        <span>添加数据</span>
+                    </a>
+                </div>
+                
+                <!-- 事件通知 -->
+                <div class="events-card">
+                    <div class="events-header">
+                        <div class="events-title-container">
+                            <svg class="heart-icon" style="width:22px; height:22px; animation:none;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="events-title">心率事件通知</span>
+                        </div>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-slow);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="event-label">低事件</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--range-fast);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="event-label">高事件</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                    <div class="event-item">
+                        <div class="event-label-container">
+                            <svg class="event-icon-small" style="fill: var(--event-irregular);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <span class="event-label">心律不齐</span>
+                        </div>
+                        <span class="event-count">0</span>
+                    </div>
+                </div>
+                
+                <a href="heart-explanation.html" class="learn-more">了解更多关于心率的信息</a>
+            </div>
+        `;
+        
+        container.appendChild(heartDataInterface);
+        
+        // 初始化界面
+        initializeMoreDataInterface();
+        
+        sheet.classList.add('active');
+    }
+    
+        function generateChartData(range) {
         let points = [];
         let count = 0;
-        let minBase, minVar, maxBase, maxVar;
 
         switch(range) {
-            case '日': count = 60; minBase=55; minVar=10; maxBase=85; maxVar=15; break;
-            case '周': count = 50; minBase=60; minVar=8; maxBase=90; maxVar=15; break;
-            case '月': count = 70; minBase=60; minVar=12; maxBase=85; maxVar=15; break;
-            case '年': count = 80; minBase=60; minVar=8; maxBase=90; maxVar=15; break;
+            case '日':
+                count = 80 + Math.random() * 40; // More points for realistic scatter plot
+                
+                // Generate realistic heart rate data without obvious trends
+                for (let i = 0; i < count; i++) {
+                    const x = i / count; // position across the day
+                    
+                    // Base heart rate varies randomly around normal range
+                    let baseHeartRate;
+                    const rand = Math.random();
+                    
+                    if (rand < 0.7) {
+                        // 70% of data points: normal resting heart rate (60-100 bpm)
+                        baseHeartRate = 60 + Math.random() * 40;
+                    } else if (rand < 0.85) {
+                        // 15% of data points: slightly elevated (100-120 bpm)
+                        baseHeartRate = 100 + Math.random() * 20;
+                    } else if (rand < 0.95) {
+                        // 10% of data points: low heart rate (50-60 bpm)
+                        baseHeartRate = 50 + Math.random() * 10;
+                    } else {
+                        // 5% of data points: high heart rate (120-140 bpm) - exercise spikes
+                        baseHeartRate = 120 + Math.random() * 20;
+                    }
+                    
+                    // Add small random variation
+                    const variation = (Math.random() - 0.5) * 8;
+                    const finalHeartRate = Math.max(45, Math.min(150, baseHeartRate + variation));
+                    
+                    points.push({
+                        x: x,
+                        y: finalHeartRate
+                    });
+                }
+                
+                // Sort by x position
+                points.sort((a,b) => a.x - b.x);
+                break;
+            case '周': 
+                count = 7; 
+                for (let i = 0; i < count; i++) {
+                    points.push({
+                        min: 50 + Math.random() * 10, // 50-60
+                        max: 90 + Math.random() * 30, // 90-120
+                    });
+                }
+                break;
+            case '月': 
+                count = 30; 
+                for (let i = 0; i < count; i++) {
+                    points.push({
+                        min: 50 + Math.random() * 10,
+                        max: 95 + Math.random() * 35,
+                    });
+                }
+                break;
+            case '半年': 
+                count = 26; // 26 weeks
+                for (let i = 0; i < count; i++) {
+                    points.push({
+                        min: 48 + Math.random() * 12,
+                        max: 100 + Math.random() * 40,
+                    });
+                }
+                break;
         }
-        
-        // 生成基础数据点，主要在正常范围内
-        for (let i = 0; i < count; i++) {
-            const min = (minBase - minVar) + Math.random() * (2 * minVar);
-            const max = (maxBase - maxVar) + Math.random() * (2 * maxVar);
-            points.push({
-                x: Math.random(),
-                y: min + Math.random() * (max - min)
-            });
-        }
-        
-        // 大幅减少高心率范围的数据点（红色区域 > 100 bpm）
-        const highHeartRateCount = Math.floor(count * 0.08); // 减少到8%的点为高心率
-        for (let i = 0; i < highHeartRateCount; i++) {
-            points.push({
-                x: Math.random(),
-                y: 100 + Math.random() * 25 // 100-125 bpm 的高心率范围，也减少了上限
-            });
-        }
-        
-        // 极少数的峰值点
-        const peakCount = Math.floor(count * 0.02); // 减少到2%的点为峰值
-        for (let i = 0; i < peakCount; i++) {
-            points.push({
-                x: Math.random(),
-                y: 110 + Math.random() * 15 // 110-125 bpm 的峰值范围
-            });
-        }
-        
         return points;
     }
 
     function renderChart() {
         svg.innerHTML = '';
         const data = generateChartData(activeTimeRange);
+        currentChartData = data;
+
+        const yMax = 150;
+        const yScale = (val) => chartHeight - chartPadding.bottom - (val / yMax) * chartDrawableHeight;
         
-        const yScale = (val) => chartHeight - chartPadding.bottom - (val / 150) * chartDrawableHeight;
-        
-        // Grid lines and labels
+        const chartInnerWidth = chartWidth - chartPadding.left - chartPadding.right;
+
+        // Grid lines and axes
         const yLabels = [0, 50, 100, 150];
         yLabels.forEach(val => {
             const y = yScale(val);
-            svg.innerHTML += `<line class="grid-line" x1="${chartPadding.left}" y1="${y}" x2="${chartWidth - chartPadding.right}" y2="${y}"></line>`;
-            svg.innerHTML += `<text class="axis-label" x="0" y="${y + 4}">${val}</text>`;
+            svg.innerHTML += `<line class="grid-line" x1="${chartPadding.left - 5}" y1="${y}" x2="${chartWidth - chartPadding.right}" y2="${y}" style="stroke-dasharray: 2, 3;"></line>`;
+            svg.innerHTML += `<text class="axis-label" x="${chartPadding.left - 10}" y="${y + 4}" text-anchor="end">${val}</text>`;
         });
-        
-        const xLabels = {
-            '日': ['0时', '6时', '12时', '18时'],
-            '周': ['一', '二', '三', '四', '五', '六', '日'],
-            '月': ['1', '10', '20', '30'],
-            '年': ['1月', '3月', '6月', '9月', '12月']
+
+        const xLabelValues = {
+            '日': ['0', '4', '8', '12', '16', '20', '24'],
+            '周': ['日', '一', '二', '三', '四', '五', '六'],
+            '月': ['Aug', '4', '11', '18', '25'],
+            '半年': ['1月', '2月', '3月', '4月', '5月', '6月']
         }[activeTimeRange];
         
-        xLabels.forEach((label, i) => {
-            const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
-            svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight}" text-anchor="middle">${label}</text>`;
+        xLabelValues.forEach((label, i) => {
+            const x = chartPadding.left + (i * (chartInnerWidth / (xLabelValues.length -1)));
+            svg.innerHTML += `<line class="grid-line" x1="${x}" y1="${chartPadding.top}" x2="${x}" y2="${chartHeight - chartPadding.bottom}" style="stroke-dasharray: 2, 3;"></line>`;
+            svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight - 10}" text-anchor="middle">${label}</text>`;
         });
 
-        // Scatter plot points
-        const minData = Math.min(...data.map(d => d.y));
-        const maxData = Math.max(...data.map(d => d.y));
+        // Chart drawing logic
+        const isRangeSelected = selectedSummary === 'range';
 
-        data.forEach(d => {
-            const x = chartPadding.left + d.x * (chartWidth - chartPadding.left - chartPadding.right);
-            const y = yScale(d.y);
-            let color = 'var(--range-normal)'; // 默认绿色
+        if (activeTimeRange === '日') {
+            data.forEach((d, i) => {
+                const x = chartPadding.left + d.x * chartInnerWidth;
+                const y = yScale(d.y);
+                let color = '#f55d58';
+                if (d.y < 60) color = '#87ceeb';
+                else if (d.y <= 100) color = '#4caf50';
+                
+                svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2" fill="${color}" opacity="${isRangeSelected ? 0.3 : 0.8}" data-index="${i}" />`;
+            });
+        } else {
+            const barCount = data.length;
+            const barSpacing = chartInnerWidth / barCount;
             
-            // 只使用标尺的三个颜色
-            if (d.y < 60) {
-                color = 'var(--range-slow)'; // 蓝色 - 低心率
-            } else if (d.y >= 60 && d.y <= 100) {
-                color = 'var(--range-normal)'; // 绿色 - 正常心率
-            } else {
-                color = 'var(--range-fast)'; // 红色 - 高心率
-            }
-            
-            let opacity = 1;
-            if (selectedSummary === 'range' && d.y !== minData && d.y !== maxData) {
-                opacity = 0.3;
-            }
-            
-            // 当选择静息心率或常规心率时，不显示散点图
-            if (selectedSummary !== 'latest' && selectedSummary !== 'resting' && selectedSummary !== 'regular') {
-                 svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" opacity="${opacity}" />`;
-            }
-        });
-        
-        // Overlays for specific views
-        if (selectedSummary === 'range') {
-            const minPoint = data.reduce((prev, curr) => prev.y < curr.y ? prev : curr);
-            const maxPoint = data.reduce((prev, curr) => prev.y > curr.y ? prev : curr);
-            const minX = chartPadding.left + minPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
-            const minY = yScale(minPoint.y);
-            const maxX = chartPadding.left + maxPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
-            const maxY = yScale(maxPoint.y);
-            
-            svg.innerHTML += `<circle cx="${minX}" cy="${minY}" r="4" fill="var(--accent-red)" />`;
-            svg.innerHTML += `<text class="axis-label" x="${minX}" y="${minY - 10}" text-anchor="middle">最低 ${Math.round(minPoint.y)}</text>`;
-            svg.innerHTML += `<circle cx="${maxX}" cy="${maxY}" r="4" fill="var(--accent-red)" />`;
-            svg.innerHTML += `<text class="axis-label" x="${maxX}" y="${maxY - 10}" text-anchor="middle">最高 ${Math.round(maxPoint.y)}</text>`;
+            data.forEach((d, i) => {
+                if (!d.min || !d.max) return;
+                const rectWidth = Math.max(2, barSpacing * 0.35);
+                const x = chartPadding.left + i * barSpacing + (barSpacing - rectWidth) / 2;
+                const y1 = yScale(d.max);
+                const y2 = yScale(d.min);
+                const height = Math.max(2, y2 - y1);
+                
+                svg.innerHTML += `<rect x="${x}" y="${y1}" width="${rectWidth}" height="${height}" rx="${rectWidth/2}" ry="${rectWidth/2}" fill="#f55d58" opacity="${isRangeSelected ? 0.3 : 1}" data-index="${i}" />`;
+            });
         }
-        
-        if (selectedSummary === 'latest') {
-            const lastPoint = data[data.length - 1];
-            const x = chartPadding.left + lastPoint.x * (chartWidth - chartPadding.left - chartPadding.right);
-            const y = yScale(lastPoint.y);
-            svg.innerHTML += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent-red)" />`;
-            svg.innerHTML += `<text class="axis-label" x="${x}" y="${y - 12}" text-anchor="middle">最新 ${Math.round(lastPoint.y)}</text>`;
-        }
-        
-        // 静息心率横线/趋势图
-        if (selectedSummary === 'resting') {
-            const restingRate = 60; // 静息心率基准值
-            
+
+        if (isRangeSelected && data.length > 0) {
+            let overallMin = Infinity, overallMax = -Infinity;
+            let minPos = {x:0, y:0}, maxPos = {x:0, y:0};
+
             if (activeTimeRange === '日') {
-                // 日视图：显示水平线
-                const lineY = yScale(restingRate);
-                const lineStartX = chartPadding.left;
-                const lineEndX = chartWidth - chartPadding.right;
-                
-                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="5,3" />`;
-                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#4fc3f7">静息心率 ${restingRate}</text>`;
+                 data.forEach(d => {
+                    if (d.y < overallMin) {
+                        overallMin = d.y;
+                        minPos = { x: chartPadding.left + d.x * chartInnerWidth, y: yScale(d.y) };
+                    }
+                    if (d.y > overallMax) {
+                        overallMax = d.y;
+                        maxPos = { x: chartPadding.left + d.x * chartInnerWidth, y: yScale(d.y) };
+                    }
+                });
             } else {
-                // 周、月、年：显示趋势图
-                const xLabels = {
-                    '周': ['一', '二', '三', '四', '五', '六', '日'],
-                    '月': ['1', '10', '20', '30'],
-                    '年': ['1月', '3月', '6月', '9月', '12月']
-                }[activeTimeRange];
-                
-                const trendPoints = [];
-                xLabels.forEach((label, i) => {
-                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
-                    // 添加一些变化，模拟真实趋势
-                    const variation = (Math.sin(i * 0.8) * 3) + (Math.random() - 0.5) * 2;
-                    const y = yScale(restingRate + variation);
-                    trendPoints.push({ x, y });
+                const barCount = data.length;
+                const barSpacing = chartInnerWidth / barCount;
+                data.forEach((d, i) => {
+                    const rectWidth = Math.max(2, barSpacing * 0.35);
+                    const x = chartPadding.left + i * barSpacing + (barSpacing - rectWidth) / 2 + rectWidth / 2;
+                    if (d.min < overallMin) {
+                        overallMin = d.min;
+                        minPos = { x, y: yScale(d.min) };
+                    }
+                    if (d.max > overallMax) {
+                        overallMax = d.max;
+                        maxPos = { x, y: yScale(d.max) };
+                    }
                 });
-                
-                // 绘制趋势线
-                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
-                for (let i = 1; i < trendPoints.length; i++) {
-                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
-                }
-                svg.innerHTML += `<path d="${pathD}" stroke="#4fc3f7" stroke-width="2" fill="none" />`;
-                
-                // 绘制数据点
-                trendPoints.forEach(point => {
-                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#4fc3f7" />`;
-                });
-                
-                // 添加标签
-                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#4fc3f7">静息心率趋势</text>`;
             }
-        }
-        
-        // 常规心率横线/趋势图
-        if (selectedSummary === 'regular') {
-            const regularRate = 78; // 常规心率基准值
-            
-            if (activeTimeRange === '日') {
-                // 日视图：显示水平线
-                const lineY = yScale(regularRate);
-                const lineStartX = chartPadding.left;
-                const lineEndX = chartWidth - chartPadding.right;
-                
-                svg.innerHTML += `<line x1="${lineStartX}" y1="${lineY}" x2="${lineEndX}" y2="${lineY}" stroke="#81c784" stroke-width="2" stroke-dasharray="5,3" />`;
-                svg.innerHTML += `<text class="axis-label" x="${lineEndX - 10}" y="${lineY - 8}" text-anchor="end" fill="#81c784">常规心率 ${regularRate}</text>`;
-            } else {
-                // 周、月、年：显示趋势图
-                const xLabels = {
-                    '周': ['一', '二', '三', '四', '五', '六', '日'],
-                    '月': ['1', '10', '20', '30'],
-                    '年': ['1月', '3月', '6月', '9月', '12月']
-                }[activeTimeRange];
-                
-                const trendPoints = [];
-                xLabels.forEach((label, i) => {
-                    const x = chartPadding.left + i * ((chartWidth - chartPadding.left - chartPadding.right) / (xLabels.length - 1));
-                    // 添加一些变化，模拟真实趋势
-                    const variation = (Math.sin(i * 0.6) * 4) + (Math.random() - 0.5) * 3;
-                    const y = yScale(regularRate + variation);
-                    trendPoints.push({ x, y });
-                });
-                
-                // 绘制趋势线
-                let pathD = `M${trendPoints[0].x},${trendPoints[0].y}`;
-                for (let i = 1; i < trendPoints.length; i++) {
-                    pathD += ` L${trendPoints[i].x},${trendPoints[i].y}`;
-                }
-                svg.innerHTML += `<path d="${pathD}" stroke="#81c784" stroke-width="2" fill="none" />`;
-                
-                // 绘制数据点
-                trendPoints.forEach(point => {
-                    svg.innerHTML += `<circle cx="${point.x}" cy="${point.y}" r="3" fill="#81c784" />`;
-                });
-                
-                // 添加标签
-                svg.innerHTML += `<text class="axis-label" x="${chartWidth - chartPadding.right - 10}" y="${chartPadding.top + 15}" text-anchor="end" fill="#81c784">常规心率趋势</text>`;
-            }
+
+            svg.innerHTML += `<circle cx="${maxPos.x}" cy="${maxPos.y}" r="4" fill="#ffca28" stroke="white" stroke-width="2" />`;
+            svg.innerHTML += `<circle cx="${minPos.x}" cy="${minPos.y}" r="4" fill="#28a7ff" stroke="white" stroke-width="2" />`;
         }
     }
 
     renderTimeRanges();
     renderSummaryCards();
     renderChart();
+    
+    // 初始化底部面板关闭功能
+    document.getElementById('closeSheet').onclick = () => {
+        document.getElementById('moreDataSheet').classList.remove('active');
+    };
+    
+    // 初始化心电图面板关闭功能
+    document.getElementById('closeECGSheet').onclick = () => {
+        document.getElementById('ecgSheet').classList.remove('active');
+    };
+    
+    // 关闭更多数据面板
+    function closeMoreDataSheet() {
+        document.getElementById('moreDataSheet').classList.remove('active');
+    }
+    
+    // 从更多数据界面打开心电图
+    function openECGFromMoreData() {
+        document.getElementById('moreDataSheet').classList.remove('active');
+        showECGSheet();
+    }
+    
+    // 显示更多心率数据界面（在主界面内）
+    function showMoreDataInterface() {
+        const scrollView = document.querySelector('.scroll-view');
+        const originalContent = scrollView.innerHTML;
+        
+        // 保存原始内容以便返回
+        window.originalHeartContent = originalContent;
+        
+        // 替换为更多心率数据界面
+        scrollView.innerHTML = `
+            <!-- 实时心率区域 -->
+            <div class="realtime-container">
+                <div class="heart-rate-info">
+                    <svg class="heart-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <div class="heart-rate-value">78</div>
+                    <div class="heart-rate-label">心率 bpm</div>
+                    <div class="date-label">今天</div>
+                </div>
+                <div class="range-bar-container">
+                    <div class="range-bar">
+                        <div class="range-pointer"></div>
+                        <div class="range-segment-slow"></div>
+                        <div class="range-segment-normal"></div>
+                        <div class="range-segment-fast"></div>
+                        <div class="range-segment-extra"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 时间范围选择器 -->
+            <div class="time-range-container">
+                <button class="time-range-btn active">日</button>
+                <button class="time-range-btn">周</button>
+                <button class="time-range-btn">月</button>
+                <button class="time-range-btn">半年</button>
+            </div>
+            
+            <!-- 图表容器 -->
+            <div class="chart-container">
+                <svg class="chart-svg"></svg>
+            </div>
+            
+            <!-- 数据摘要卡片 -->
+            <div class="summary-container"></div>
+            
+            <!-- 心电图入口 -->
+            <div class="ecg-entry-section">
+                <div class="ecg-entry-card" onclick="openECGFromMain()">
+                    <div class="ecg-entry-content">
+                        <svg class="ecg-icon" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <div class="ecg-text">
+                            <div class="ecg-title">心电图分析</div>
+                            <div class="ecg-subtitle">查看详细的心电图数据和专业分析</div>
+                        </div>
+                        <div class="ecg-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 添加数据按钮 -->
+            <div class="add-data-section">
+                <a href="heart-add-data.html" class="add-data-button-large">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+                    </svg>
+                    <span>添加数据</span>
+                </a>
+            </div>
+            
+            <!-- 事件通知 -->
+            <div class="events-card">
+                <div class="events-header">
+                    <div class="events-title-container">
+                        <svg class="heart-icon" style="width:22px; height:22px; animation:none;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span class="events-title">心率事件通知</span>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="event-label-container">
+                        <svg class="event-icon-small" style="fill: var(--range-slow);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span class="event-label">低事件</span>
+                    </div>
+                    <span class="event-count">0</span>
+                </div>
+                <div class="event-item">
+                    <div class="event-label-container">
+                        <svg class="event-icon-small" style="fill: var(--range-fast);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span class="event-label">高事件</span>
+                    </div>
+                    <span class="event-count">0</span>
+                </div>
+                <div class="event-item">
+                    <div class="event-label-container">
+                        <svg class="event-icon-small" style="fill: var(--event-irregular);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span class="event-label">心律不齐</span>
+                    </div>
+                    <span class="event-count">0</span>
+                </div>
+            </div>
+            
+            <a href="heart-explanation.html" class="learn-more">了解更多关于心率的信息</a>
+        `;
+        
+        // 初始化界面
+        initializeMoreDataInterfaceInMain();
+        
+        // 修改返回按钮功能
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.onclick = (e) => {
+                e.preventDefault();
+                returnToMainInterface();
+            };
+        }
+        
+        // 更新页面标题
+        const pageTitle = document.querySelector('.page-title');
+        if (pageTitle) {
+            pageTitle.textContent = '心率数据详情';
+        }
+    }
+    
+    // 返回主界面
+    function returnToMainInterface() {
+        if (window.originalHeartContent) {
+            const scrollView = document.querySelector('.scroll-view');
+            scrollView.innerHTML = window.originalHeartContent;
+            
+            // 重新初始化主界面
+            renderTimeRanges();
+            renderSummaryCards();
+            renderChart();
+            updateRangePointerPosition();
+            updateRangeHighlight(85);
+            
+            // 恢复返回按钮功能
+            const backButton = document.querySelector('.back-button');
+            if (backButton) {
+                backButton.onclick = null;
+                backButton.href = 'index.html';
+            }
+            
+            // 恢复页面标题
+            const pageTitle = document.querySelector('.page-title');
+            if (pageTitle) {
+                pageTitle.textContent = '心率详情';
+            }
+        }
+    }
+    
+    // 从主界面打开心电图
+    function openECGFromMain() {
+        showECGSheet();
+    }
+    
+    // 初始化更多数据界面（在主界面内）
+    function initializeMoreDataInterfaceInMain() {
+        // 初始化时间范围选择器
+        const timeRangeBtns = document.querySelectorAll('.time-range-btn');
+        timeRangeBtns.forEach(btn => {
+            btn.onclick = () => {
+                timeRangeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // 更新图表
+                const chartSvg = document.querySelector('.chart-svg');
+                if (chartSvg) {
+                    renderChartForMoreData(chartSvg);
+                }
+            };
+        });
+        
+        // 初始化数据摘要卡片
+        const summaryContainer = document.querySelector('.summary-container');
+        if (summaryContainer) {
+            renderSummaryCardsForMoreData(summaryContainer);
+        }
+        
+        // 初始化图表
+        const chartSvg = document.querySelector('.chart-svg');
+        if (chartSvg) {
+            renderChartForMoreData(chartSvg);
+        }
+        
+        // 初始化心率范围指示器
+        updateRangePointerPositionForMoreData();
+        updateRangeHighlightForMoreData(85);
+    }
+    
+    // 为更多数据界面渲染摘要卡片
+    function renderSummaryCardsForMoreData(container) {
+        container.innerHTML = '';
+        
+        const summaryData = [
+            { id: 'latest', label: '最新: 4:34', value: '78', unit: 'bpm' },
+            { id: 'range', label: '心率范围', value: '52-118', unit: 'bpm' },
+            { id: 'resting', label: '静息心率', value: '53', unit: 'bpm' },
+            { id: 'regular', label: '常规心率', value: '78', unit: 'bpm' },
+        ];
+        
+        summaryData.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'summary-card';
+            card.innerHTML = `
+                <span class="summary-label">${item.label}</span>
+                <div>
+                    <span class="summary-value">${item.value}</span>
+                    <span class="summary-unit">${item.unit}</span>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+    
+    // 为更多数据界面渲染图表
+    function renderChartForMoreData(svg) {
+        // 使用与主界面相同的图表渲染逻辑
+        const chartWidth = 350, chartHeight = 250;
+        const chartPadding = { top: 20, bottom: 30, left: 20, right: 20 };
+        const chartDrawableHeight = chartHeight - chartPadding.top - chartPadding.bottom;
+        const chartInnerWidth = chartWidth - chartPadding.left - chartPadding.right;
+        
+        // 获取当前选中的时间范围
+        const activeBtn = document.querySelector('.time-range-btn.active');
+        const activeTimeRange = activeBtn ? activeBtn.textContent : '日';
+        
+        // 生成数据
+        const data = generateChartData(activeTimeRange);
+        
+        const yMax = 150;
+        const yScale = (val) => chartHeight - chartPadding.bottom - (val / yMax) * chartDrawableHeight;
+        
+        svg.innerHTML = '';
+        
+        // Grid lines and Y-axis labels
+        const yLabels = [0, 50, 100, 150];
+        yLabels.forEach(val => {
+            const y = yScale(val);
+            svg.innerHTML += `<line class="grid-line" x1="${chartPadding.left - 5}" y1="${y}" x2="${chartWidth - chartPadding.right}" y2="${y}" style="stroke-dasharray: 2, 3;"></line>`;
+            svg.innerHTML += `<text class="axis-label" x="${chartPadding.left - 10}" y="${y + 4}" text-anchor="end">${val}</text>`;
+        });
+        
+        // X-axis labels
+        const xLabelValues = {
+            '日': ['0', '4', '8', '12', '16', '20', '24'],
+            '周': ['日', '一', '二', '三', '四', '五', '六'],
+            '月': ['Aug', '4', '11', '18', '25'],
+            '半年': ['1月', '2月', '3月', '4月', '5月', '6月']
+        }[activeTimeRange];
+        
+        xLabelValues.forEach((label, i) => {
+            const x = chartPadding.left + i * (chartInnerWidth / (xLabelValues.length -1));
+            svg.innerHTML += `<line class="grid-line" x1="${x}" y1="${chartPadding.top}" x2="${x}" y2="${chartHeight - chartPadding.bottom}" style="stroke-dasharray: 2, 3;"></line>`;
+            
+            // For month view, display month and day on separate lines
+            if (activeTimeRange === '月') {
+                const monthLabels = ['Aug', 'Aug', 'Aug', 'Aug', 'Aug'];
+                const dayLabels = ['2', '9', '16', '23', '30'];
+                svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight - 20}" text-anchor="middle">${monthLabels[i]}</text>`;
+                svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight - 8}" text-anchor="middle">${dayLabels[i]}</text>`;
+            } else {
+                svg.innerHTML += `<text class="axis-label" x="${x}" y="${chartHeight - 10}" text-anchor="middle">${label}</text>`;
+            }
+        });
+
+        // Chart drawing logic
+        if (activeTimeRange === '日') {
+            // Realistic scatter plot for daily view
+            data.forEach(d => {
+                const x = chartPadding.left + d.x * chartInnerWidth;
+                const y = yScale(d.y);
+                
+                // Determine color based on heart rate value
+                let color = '#f55d58'; // Default red
+                if (d.y < 60) {
+                    color = '#87ceeb'; // Blue for low heart rate
+                } else if (d.y >= 60 && d.y <= 100) {
+                    color = '#4caf50'; // Green for normal heart rate
+                } else {
+                    color = '#f55d58'; // Red for high heart rate
+                }
+                
+                // Draw scatter point with varying sizes for more realistic appearance
+                const pointSize = Math.random() * 1.5 + 1.5; // Random size between 1.5-3
+                svg.innerHTML += `<circle cx="${x}" cy="${y}" r="${pointSize}" fill="${color}" opacity="0.8" />`;
+            });
+        } else {
+            // Range bars for week/month/half-year view
+            const barCount = data.length;
+            const barSpacing = chartInnerWidth / barCount;
+            
+            data.forEach((d, i) => {
+                if (!d.min || !d.max) return;
+                const rectWidth = Math.max(2, barSpacing * 0.35);
+                const x = chartPadding.left + i * barSpacing + (barSpacing - rectWidth) / 2;
+                const y1 = yScale(d.max);
+                const y2 = yScale(d.min);
+                const height = Math.max(2, y2 - y1);
+                
+                svg.innerHTML += `<rect x="${x}" y="${y1}" width="${rectWidth}" height="${height}" rx="${rectWidth/2}" ry="${rectWidth/2}" fill="#f55d58" />`;
+            });
+        }
+    }
+    
+    // 为更多数据界面更新指针位置
+    function updateRangePointerPositionForMoreData() {
+        const rangeBar = document.querySelector('.range-bar');
+        const rangePointer = document.querySelector('.range-pointer');
+        if (rangeBar && rangePointer) {
+            const heartRateValue = 85;
+            const minValue = 30;
+            const maxValue = 150;
+            const percentage = Math.min(100, Math.max(0, (heartRateValue - minValue) / (maxValue - minValue) * 100));
+            const barWidth = rangeBar.offsetWidth;
+            const pointerLeft = barWidth * (percentage / 100);
+            rangePointer.style.left = pointerLeft + 'px';
+        }
+    }
+    
+    // 为更多数据界面更新高亮
+    function updateRangeHighlightForMoreData(heartRate) {
+        const segments = document.querySelectorAll('.range-segment-slow, .range-segment-normal, .range-segment-fast, .range-segment-extra');
+        segments.forEach(segment => {
+            segment.classList.remove('highlight');
+        });
+        
+        if (heartRate < 60) {
+            document.querySelector('.range-segment-slow').classList.add('highlight');
+        } else if (heartRate < 100) {
+            document.querySelector('.range-segment-normal').classList.add('highlight');
+        } else if (heartRate < 130) {
+            document.querySelector('.range-segment-fast').classList.add('highlight');
+        } else {
+            document.querySelector('.range-segment-extra').classList.add('highlight');
+        }
+    }
+    
+    // 初始化心率范围指示器位置
+    function updateRangePointerPosition() {
+        const rangeBar = document.querySelector('.range-bar');
+        const rangePointer = document.querySelector('.range-pointer');
+        const heartRateValue = parseInt(document.querySelector('.heart-rate-value').textContent);
+        const minValue = 30;
+        const maxValue = 150;
+        const percentage = Math.min(100, Math.max(0, (heartRateValue - minValue) / (maxValue - minValue) * 100));
+        // 设置指针位置 (横向标尺，从左到右)
+        if (rangeBar && rangePointer) {
+            const barWidth = rangeBar.offsetWidth;
+            const pointerLeft = barWidth * (percentage / 100);
+            rangePointer.style.left = pointerLeft + 'px';
+        }
+    }
+    
+    // 初始定位和高亮
+    updateRangePointerPosition();
+    updateRangeHighlight(78); // 初始化时的心率值
 });
 </script>
 
+    <!-- Bottom Sheet for More Data -->
+    <div id="moreDataSheet" class="bottom-sheet">
+        <div class="sheet-content">
+            <div class="sheet-header">
+                <h2>更多心率数据</h2>
+                <button id="closeSheet" class="close-btn">×</button>
+            </div>
+            <div class="sheet-body">
+                <div id="moreDataContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ECG Sheet -->
+    <div id="ecgSheet" class="ecg-sheet">
+        <div class="ecg-content">
+            <!-- Header -->
+            <div class="ecg-header">
+                <span class="ecg-title">心率</span>
+                <button class="ecg-done-btn" id="closeECGSheet">完成</button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="ecg-scroll-content">
+                <!-- Time Range Selector -->
+                <div class="time-range-selector">
+                    <button class="time-range-option">小时</button>
+                    <button class="time-range-option active">日</button>
+                    <button class="time-range-option">周</button>
+                    <button class="time-range-option">月</button>
+                    <button class="time-range-option">6个月</button>
+                    <button class="time-range-option">年</button>
+                </div>
+
+            <!-- Info Container -->
+            <div class="info-container">
+                <div class="status-container">
+                    <div class="status-label">状态</div>
+                    <div class="status-value">
+                        <svg class="check-icon" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#4caf50"/>
+                        </svg>
+                        <span>正常 窦性心律</span>
+                    </div>
+                </div>
+                <div class="heart-rate-container">
+                    <div class="heart-rate-label">心率</div>
+                    <div class="heart-rate-value">82 bpm</div>
+                </div>
+            </div>
+
+            <!-- ECG Chart Container -->
+            <div class="ecg-chart-container">
+                <svg class="ecg-chart" width="350" height="200" viewBox="0 0 350 200">
+                    <defs>
+                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)"/>
+                    <polyline 
+                        points="20,100 40,80 60,120 80,60 100,140 120,80 140,100 160,120 180,90 200,110 220,70 240,130 260,90 280,100 300,80 320,120 330,100" 
+                        stroke="#2196f3" 
+                        stroke-width="2" 
+                        fill="none" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round"/>
+                </svg>
+                <div class="time-scale">
+                    <span>-1</span>
+                    <span>0</span>
+                    <span>1</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="play-button">▶ 播放心电图</button>
+                <button class="measure-button">▶ 测量心电图</button>
+            </div>
+
+            <!-- Status Description -->
+            <div class="status-description">
+                <h3>状态</h3>
+                <p>您的心电图显示正常的心律模式。窦性心律是健康心脏的正常节律，表明您的心脏功能良好。建议继续保持健康的生活方式。</p>
+            </div>
+
+            <!-- Health Diary Section -->
+            <div class="section-container">
+                <h3>健康日记</h3>
+                <div class="time-entry">20:00</div>
+                <div class="health-entry">
+                    <div class="health-left">
+                        <svg class="check-icon" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#4caf50"/>
+                        </svg>
+                        <span>心电图</span>
+                    </div>
+                    <div class="health-right">
+                        <span class="status-text">正常</span>
+                        <span class="arrow">›</span>
+                    </div>
+                </div>
+                <div class="action-buttons-row">
+                    <button class="add-log-button">添加日志</button>
+                    <button class="explore-button">探索</button>
+                </div>
+            </div>
+
+            <!-- Clinical Service Card -->
+            <div class="section-container">
+                <div class="clinical-card">
+                    <div class="clinical-left">
+                        <div class="doctor-badge">M</div>
+                        <div class="clinical-text">
+                            <div class="clinical-title">Cardio Check-Up</div>
+                            <div class="clinical-subtitle">心脏病专家在24小时内进行检查</div>
+                        </div>
+                    </div>
+                    <div class="doctor-avatar">👨🏾‍⚕️</div>
+                </div>
+            </div>
+
+            <!-- Share Options -->
+            <div class="section-container">
+                <div class="share-option">
+                    <div class="share-left">
+                        <span class="share-icon">📋</span>
+                        <span>分享 HealthLink</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+                <div class="share-option">
+                    <div class="share-left">
+                        <span class="share-icon">📄</span>
+                        <span>以 PDF 格式分享此测量结果</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+                <div class="share-option">
+                    <div class="share-left">
+                        <span class="share-icon">📊</span>
+                        <span>分享完整的健康报告</span>
+                    </div>
+                    <span class="arrow">›</span>
+                </div>
+            </div>
+
+            <!-- Learn More Section -->
+            <div class="learn-more-section">
+                <a href="#" class="learn-more-link">了解更多关于心电图的信息</a>
+                <div class="info-card">
+                    <p>心电图（ECG）是一种记录心脏电活动的测试。它可以帮助医生诊断各种心脏疾病，包括心律不齐、心脏病发作等。</p>
+                    <a href="#" class="info-source">来源: 世界卫生组织</a>
+                </div>
+            </div>
+
+            <!-- Details Section -->
+            <div class="details-section">
+                <h3 class="details-header">参数详解</h3>
+                <div class="details-card">
+                    <span class="details-icon">📈</span>
+                    <span class="details-text">心电图分析</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

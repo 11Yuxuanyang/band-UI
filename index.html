@@ -355,46 +355,35 @@
                                         <div class="w-5 h-5 rounded-full bg-withings-pink flex items-center justify-center">
                                             <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg>
                                         </div>
-                                        <span class="font-semibold">平均心率</span>
+                                        <span class="font-semibold">心率</span>
                                     </div>
-                                    <span class="text-sm text-gray-400">09:29 &gt;</span>
+                                    <span class="text-sm text-gray-400">13:47 &gt;</span>
                                 </div>
                                 <div class="flex justify-between items-end">
                                     <div class="flex-shrink-0">
-                                        <p class="text-3xl font-bold">71 <span class="text-lg font-normal">bpm</span></p>
+                                        <p class="text-3xl font-bold">78 <span class="text-lg font-normal">bpm</span></p>
                                         <p class="text-sm text-gray-400">正常</p>
                                     </div>
-                                    <div class="flex-1 ml-4 space-y-2">
-                                        <!-- Heart Rate Range Indicator -->
-                                        <div class="relative">
-                                            <!-- Range Bar -->
-                                            <div class="h-3 rounded-full overflow-hidden flex">
-                                                <!-- Low Zone (Yellow) -->
-                                                <div class="bg-yellow-500 flex-1"></div>
-                                                <!-- Below Average Zone (Light Green) -->
-                                                <div class="bg-green-400 flex-1"></div>
-                                                <!-- Normal Zone (Dark Green) -->
-                                                <div class="bg-green-600 flex-1"></div>
-                                            </div>
-                                            <!-- Current Heart Rate Indicator -->
-                                            <div class="absolute -top-1 left-3/4 transform -translate-x-1/2">
-                                                <svg class="w-3 h-3 text-gray-300" viewBox="0 0 12 12" fill="currentColor">
-                                                    <path d="M6 0 L9 4 L3 4 Z"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        <!-- Range Labels -->
-                                        <div class="flex justify-between text-xs text-gray-400">
-                                            <span>低</span>
-                                            <span>低于平均值</span>
-                                            <span>正常</span>
-                                        </div>
-                                        <!-- Range Values -->
-                                        <div class="flex justify-between text-xs text-gray-500">
-                                            <span>60</span>
-                                            <span>75</span>
-                                            <span>90</span>
-                                        </div>
+                                    <div class="flex-1 ml-4">
+                                        <!-- Line Chart -->
+                                        <svg class="w-full h-12" viewBox="0 0 100 30" preserveAspectRatio="none">
+                                            <defs>
+                                                <linearGradient id="heartRateGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                    <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+                                                    <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0.1" />
+                                                </linearGradient>
+                                            </defs>
+                                            <!-- Background area -->
+                                            <path d="M0,20 L10,18 L20,15 L30,12 L40,8 L50,10 L60,5 L70,8 L80,12 L90,15 L100,18 L100,30 L0,30 Z" 
+                                                  fill="url(#heartRateGradient)" />
+                                            <!-- Line -->
+                                            <path d="M0,20 L10,18 L20,15 L30,12 L40,8 L50,10 L60,5 L70,8 L80,12 L90,15 L100,18" 
+                                                  stroke="#3b82f6" 
+                                                  stroke-width="1.5" 
+                                                  fill="none" 
+                                                  stroke-linecap="round" 
+                                                  stroke-linejoin="round" />
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
