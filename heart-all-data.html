@@ -1148,7 +1148,7 @@
                     <svg viewBox="0 0 24 24">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" stroke="none" fill="currentColor"/>
                     </svg>
-                    <span>添加数据</span>
+                    <span>添加</span>
                 </a>
             </div>
             <div class="scroll-view">
@@ -1209,6 +1209,113 @@
                     </div>
                 </div>
                 <a href="heart-explanation.html" class="learn-more">了解更多关于心率的信息</a>
+            </div>
+        </div>
+            
+            <!-- 右侧添加数据区域 -->
+            <div class="add-data-section-sidebar">
+                <div class="add-data-header">
+                    <h2 class="add-data-title">添加数据</h2>
+                </div>
+                <div class="add-data-content">
+                    <!-- 心率相关数据类型卡片 -->
+                    <div class="add-data-cards">
+                        
+                        <!-- 心率 -->
+                        <div class="add-data-card" onclick="addHeartRate()">
+                            <div class="add-data-icon-container heart-rate">
+                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </div>
+                            <div class="add-data-info">
+                                <h3 class="add-data-name">心率</h3>
+                                <p class="add-data-desc">测量当前心率</p>
+                            </div>
+                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+
+                        <!-- 静息心率 -->
+                        <div class="add-data-card" onclick="addRestingHeartRate()">
+                            <div class="add-data-icon-container resting">
+                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H9V3H15.5L20.5 8H15V10H22L21 9M7 13C8.1 13 9 13.9 9 15S8.1 17 7 17 5 16.1 5 15 5.9 13 7 13M17 13C18.1 13 19 13.9 19 15S18.1 17 17 17 15 16.1 15 15 15.9 13 17 13"/>
+                                </svg>
+                            </div>
+                            <div class="add-data-info">
+                                <h3 class="add-data-name">静息心率</h3>
+                                <p class="add-data-desc">安静状态下的心率</p>
+                            </div>
+                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+
+                        <!-- 步行平均心率 -->
+                        <div class="add-data-card" onclick="addWalkingHeartRate()">
+                            <div class="add-data-icon-container walking">
+                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,12L10.5,8.5L9.08,9.92L12.17,13L20.59,4.58L19.17,3.17L14,12Z"/>
+                                </svg>
+                            </div>
+                            <div class="add-data-info">
+                                <h3 class="add-data-name">步行平均心率</h3>
+                                <p class="add-data-desc">步行时的平均心率</p>
+                            </div>
+                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+
+                        <!-- 心率变异性 -->
+                        <div class="add-data-card" onclick="addHeartRateVariability()">
+                            <div class="add-data-icon-container variability">
+                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12M11,17H13V11H11V17M11,9H13V7H11V9Z"/>
+                                </svg>
+                            </div>
+                            <div class="add-data-info">
+                                <h3 class="add-data-name">心率变异性</h3>
+                                <p class="add-data-desc">心跳间隔的变化</p>
+                            </div>
+                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+
+                        <!-- 心电图 -->
+                        <div class="add-data-card" onclick="addECG()">
+                            <div class="add-data-icon-container ecg">
+                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/>
+                                </svg>
+                            </div>
+                            <div class="add-data-info">
+                                <h3 class="add-data-name">心电图</h3>
+                                <p class="add-data-desc">心脏电活动记录</p>
+                            </div>
+                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- 信息提示 -->
+                    <div class="add-data-info-section">
+                        <div class="add-data-info-icon">
+                            <svg fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,17A1.5,1.5 0 0,1 10.5,15.5A1.5,1.5 0 0,1 12,14A1.5,1.5 0 0,1 13.5,15.5A1.5,1.5 0 0,1 12,17M12,10.5C12.8,10.5 13.5,9.8 13.5,9C13.5,8.2 12.8,7.5 12,7.5C11.2,7.5 10.5,8.2 10.5,9C10.5,9.8 11.2,10.5 12,10.5Z"/>
+                            </svg>
+                        </div>
+                        <div class="add-data-info-text">
+                            <h4>关于心率数据</h4>
+                            <p>您可以手动添加心率相关数据，或使用兼容的设备自动记录。这些数据将帮助您更好地了解心血管健康状况。</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1602,7 +1709,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case '月': 
-                count = 15; // 对应新的标签数量：15个数据点
+                count = 6; // 对应新的标签数量：6个数据点
                 for (let i = 0; i < count; i++) {
                     points.push({
                         min: 50 + Math.random() * 10,
@@ -1639,6 +1746,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <stop offset="40%" style="stop-color:#87ceeb;stop-opacity:0.9" />
                     <stop offset="100%" style="stop-color:#5f9ea0;stop-opacity:1" />
                 </radialGradient>
+                <linearGradient id="regularCurveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#4caf50;stop-opacity:0.8" />
+                    <stop offset="50%" style="stop-color:#66bb6a;stop-opacity:0.9" />
+                    <stop offset="100%" style="stop-color:#4caf50;stop-opacity:0.8" />
+                </linearGradient>
+                <radialGradient id="regularPointGradient" cx="50%" cy="30%" r="70%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+                    <stop offset="40%" style="stop-color:#4caf50;stop-opacity:0.9" />
+                    <stop offset="100%" style="stop-color:#388e3c;stop-opacity:1" />
+                </radialGradient>
             </defs>
         `;
         
@@ -1662,21 +1779,12 @@ document.addEventListener('DOMContentLoaded', () => {
             '日': ['0', '4', '8', '12', '16', '20', '24'],
             '周': ['日', '一', '二', '三', '四', '五', '六'],
             '月': [
-                { month: 'Aug', day: '1' },
-                { month: 'Aug', day: '3' },
                 { month: 'Aug', day: '5' },
-                { month: 'Aug', day: '8' },
-                { month: 'Aug', day: '10' },
                 { month: 'Aug', day: '12' },
-                { month: 'Aug', day: '15' },
-                { month: 'Aug', day: '17' },
                 { month: 'Aug', day: '19' },
-                { month: 'Aug', day: '22' },
-                { month: 'Aug', day: '24' },
                 { month: 'Aug', day: '26' },
-                { month: 'Aug', day: '29' },
-                { month: 'Aug', day: '31' },
-                { month: 'Sep', day: '2' }
+                { month: 'Sep', day: '2' },
+                { month: 'Sep', day: '9' }
             ],
             '半年': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         }[activeTimeRange];
@@ -1697,6 +1805,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Chart drawing logic
         const isRangeSelected = selectedSummary === 'range';
         const isRestingSelected = selectedSummary === 'resting';
+        const isRegularSelected = selectedSummary === 'regular';
 
         if (activeTimeRange === '日') {
             data.forEach((d, i) => {
@@ -1722,7 +1831,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Set opacity based on selected summary
                 let opacity = 1;
-                if (isRangeSelected || isRestingSelected) opacity = 0.3;
+                if (isRangeSelected || isRestingSelected || isRegularSelected) opacity = 0.3;
                 
                 svg.innerHTML += `<rect x="${x}" y="${y1}" width="${rectWidth}" height="${height}" rx="${rectWidth/2}" ry="${rectWidth/2}" fill="#f55d58" opacity="${opacity}" data-index="${i}" />`;
             });
@@ -1791,11 +1900,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lineHeight = 4;
                     const lineY = currentMonth.y - lineHeight / 2;
                     
-                    // Add subtle shadow effect
-                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY + 1}" width="${lineWidth}" height="${lineHeight}" fill="rgba(0,0,0,0.1)" rx="2" opacity="0.3" />`;
-                    
-                    // Main line with rounded corners and gradient effect
-                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));" />`;
+                    // Main line with rounded corners (no shadow)
+                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" />`;
                 }
                 
                 // Third pass: draw trend indicators
@@ -1813,21 +1919,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trendY = currentMonth.y;
                     const verticalOffset = isIncrease ? -8 : 15; // Above for increase, below for decrease
                     
-                    // Draw trend indicator
+                    // Draw trend indicator (clean, no background)
                     const symbol = isIncrease ? '+' : '-';
                     const absPercentChange = Math.abs(percentChange).toFixed(1);
-                    // Enhanced trend indicator with background and shadow
-                    const textBgWidth = (symbol + absPercentChange + '%').length * 6 + 8;
-                    const textBgHeight = 14;
-                    const textBgX = trendX - 2;
-                    const textBgY = trendY + verticalOffset - 10;
-                    
-                    // Background with rounded corners and shadow
-                    svg.innerHTML += `<rect x="${textBgX + 1}" y="${textBgY + 1}" width="${textBgWidth}" height="${textBgHeight}" fill="rgba(0,0,0,0.1)" rx="3" opacity="0.3" />`;
-                    svg.innerHTML += `<rect x="${textBgX}" y="${textBgY}" width="${textBgWidth}" height="${textBgHeight}" fill="rgba(0,0,0,0.8)" rx="3" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />`;
-                    
-                    // Text with enhanced styling
-                    svg.innerHTML += `<text x="${trendX + 2}" y="${trendY + verticalOffset - 2}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start" style="text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${symbol}${absPercentChange}%</text>`;
+                    svg.innerHTML += `<text x="${trendX}" y="${trendY + verticalOffset}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start">${symbol}${absPercentChange}%</text>`;
                 }
             } else {
                 // For other views, use individual points and curves
@@ -1859,6 +1954,126 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     // Enhanced curve with gradient and shadow effects
                     svg.innerHTML += `<path d="${pathData}" stroke="url(#restingCurveGradient)" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 1px 3px rgba(135, 206, 235, 0.3));" />`;
+                }
+            }
+        }
+
+        // Handle regular heart rate selection (unified with resting heart rate display)
+        if (isRegularSelected && data.length > 0 && activeTimeRange !== '日') {
+            const barCount = data.length;
+            const barSpacing = chartInnerWidth / barCount;
+            
+            if (activeTimeRange === '半年') {
+                // For half-year view, group every 4 bars into a month and draw horizontal lines
+                const barsPerMonth = 4; // Assuming 4 weeks per month in half-year view
+                const monthCount = Math.ceil(barCount / barsPerMonth);
+                let monthlyAverages = [];
+                
+                // First pass: calculate all monthly averages
+                for (let monthIndex = 0; monthIndex < monthCount; monthIndex++) {
+                    const startBarIndex = monthIndex * barsPerMonth;
+                    const endBarIndex = Math.min(startBarIndex + barsPerMonth, barCount);
+                    
+                    // Calculate average regular heart rate for this month
+                    let monthRegularRateSum = 0;
+                    let validBars = 0;
+                    
+                    for (let i = startBarIndex; i < endBarIndex; i++) {
+                        if (data[i] && data[i].min && data[i].max) {
+                            const regularRate = Math.round((data[i].min + data[i].max) / 2 + Math.random() * 15); // Slightly higher than resting
+                            monthRegularRateSum += regularRate;
+                            validBars++;
+                        }
+                    }
+                    
+                    if (validBars > 0) {
+                        const avgRegularRate = monthRegularRateSum / validBars;
+                        const y = yScale(avgRegularRate);
+                        
+                        // Store monthly data for trend calculation
+                        monthlyAverages.push({
+                            monthIndex,
+                            avgRegularRate,
+                            y,
+                            startX: chartPadding.left + startBarIndex * barSpacing,
+                            endX: chartPadding.left + endBarIndex * barSpacing,
+                            centerX: chartPadding.left + (startBarIndex + endBarIndex) * barSpacing / 2
+                        });
+                    }
+                }
+                
+                // Second pass: draw lines with appropriate colors based on trends
+                for (let i = 0; i < monthlyAverages.length; i++) {
+                    const currentMonth = monthlyAverages[i];
+                    let lineColor = '#ffffff'; // Default white for first month
+                    
+                    // Determine line color based on trend from previous month
+                    if (i > 0) {
+                        const prevMonth = monthlyAverages[i - 1];
+                        const percentChange = ((currentMonth.avgRegularRate - prevMonth.avgRegularRate) / prevMonth.avgRegularRate) * 100;
+                        const isIncrease = percentChange > 0;
+                        lineColor = isIncrease ? '#ff4444' : '#4caf50'; // Red for increase, green for decrease
+                    }
+                    
+                    // Draw horizontal line with trend-based color
+                    // Create rounded line using rect with rounded corners for better design
+                    const lineWidth = currentMonth.endX - currentMonth.startX;
+                    const lineHeight = 4;
+                    const lineY = currentMonth.y - lineHeight / 2;
+                    
+                    // Main line with rounded corners (no shadow)
+                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" />`;
+                }
+                
+                // Third pass: draw trend indicators
+                for (let i = 1; i < monthlyAverages.length; i++) {
+                    const prevMonth = monthlyAverages[i - 1];
+                    const currentMonth = monthlyAverages[i];
+                    
+                    // Calculate percentage change
+                    const percentChange = ((currentMonth.avgRegularRate - prevMonth.avgRegularRate) / prevMonth.avgRegularRate) * 100;
+                    const isIncrease = percentChange > 0;
+                    const color = isIncrease ? '#ff4444' : '#4caf50'; // Red for increase, green for decrease
+                    
+                    // Position trend indicator at the start of the second line
+                    const trendX = currentMonth.startX;
+                    const trendY = currentMonth.y;
+                    const verticalOffset = isIncrease ? -8 : 15; // Above for increase, below for decrease
+                    
+                    // Draw trend indicator (clean, no background)
+                    const symbol = isIncrease ? '+' : '-';
+                    const absPercentChange = Math.abs(percentChange).toFixed(1);
+                    svg.innerHTML += `<text x="${trendX}" y="${trendY + verticalOffset}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start">${symbol}${absPercentChange}%</text>`;
+                }
+            } else {
+                // For other views, use individual points and curves
+                let regularPoints = [];
+                
+                data.forEach((d, i) => {
+                    // Calculate regular heart rate as average of min and max, with some variation
+                    const regularRate = Math.round((d.min + d.max) / 2 + Math.random() * 15); // Slightly higher than resting
+                    const rectWidth = Math.max(2, barSpacing * 0.35);
+                    const x = chartPadding.left + i * barSpacing + (barSpacing - rectWidth) / 2 + rectWidth / 2;
+                    const y = yScale(regularRate);
+                    
+                    // Store point for curve drawing
+                    regularPoints.push({x, y});
+                    
+                    // Add regular heart rate point for other views with green gradient
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="4" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.95" style="filter: drop-shadow(0 1px 4px rgba(76, 175, 80, 0.4));" />`;
+                });
+                
+                // Draw curve connecting all regular heart rate points
+                if (regularPoints.length > 1) {
+                    let pathData = `M${regularPoints[0].x},${regularPoints[0].y}`;
+                    for (let i = 1; i < regularPoints.length; i++) {
+                        const prevPoint = regularPoints[i - 1];
+                        const currentPoint = regularPoints[i];
+                        const controlPointX = (prevPoint.x + currentPoint.x) / 2;
+                        pathData += ` Q${controlPointX},${prevPoint.y} ${currentPoint.x},${currentPoint.y}`;
+                    }
+                    // Enhanced curve with green gradient and shadow effects
+                    svg.innerHTML += `<path d="${pathData}" stroke="url(#regularCurveGradient)" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 1px 3px rgba(76, 175, 80, 0.3));" />`;
                 }
             }
         }
@@ -2228,6 +2443,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <stop offset="40%" style="stop-color:#87ceeb;stop-opacity:0.9" />
                     <stop offset="100%" style="stop-color:#5f9ea0;stop-opacity:1" />
                 </radialGradient>
+                <linearGradient id="regularCurveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#4caf50;stop-opacity:0.8" />
+                    <stop offset="50%" style="stop-color:#66bb6a;stop-opacity:0.9" />
+                    <stop offset="100%" style="stop-color:#4caf50;stop-opacity:0.8" />
+                </linearGradient>
+                <radialGradient id="regularPointGradient" cx="50%" cy="30%" r="70%">
+                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+                    <stop offset="40%" style="stop-color:#4caf50;stop-opacity:0.9" />
+                    <stop offset="100%" style="stop-color:#388e3c;stop-opacity:1" />
+                </radialGradient>
             </defs>
         `;
         
@@ -2255,21 +2480,12 @@ document.addEventListener('DOMContentLoaded', () => {
             '日': ['0', '4', '8', '12', '16', '20', '24'],
             '周': ['日', '一', '二', '三', '四', '五', '六'],
             '月': [
-                { month: 'Aug', day: '1' },
-                { month: 'Aug', day: '3' },
                 { month: 'Aug', day: '5' },
-                { month: 'Aug', day: '8' },
-                { month: 'Aug', day: '10' },
                 { month: 'Aug', day: '12' },
-                { month: 'Aug', day: '15' },
-                { month: 'Aug', day: '17' },
                 { month: 'Aug', day: '19' },
-                { month: 'Aug', day: '22' },
-                { month: 'Aug', day: '24' },
                 { month: 'Aug', day: '26' },
-                { month: 'Aug', day: '29' },
-                { month: 'Aug', day: '31' },
-                { month: 'Sep', day: '2' }
+                { month: 'Sep', day: '2' },
+                { month: 'Sep', day: '9' }
             ],
             '半年': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
         }[activeTimeRange];
@@ -2289,6 +2505,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const isRangeSelected = selectedSummary === 'range';
         const isRestingSelected = selectedSummary === 'resting';
+        const isRegularSelected = selectedSummary === 'regular';
 
         if (activeTimeRange === '日') {
             data.forEach((d, i) => {
@@ -2314,7 +2531,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Set opacity based on selected summary
                 let opacity = 1;
-                if (isRangeSelected || isRestingSelected) opacity = 0.3;
+                if (isRangeSelected || isRestingSelected || isRegularSelected) opacity = 0.3;
                 
                 svg.innerHTML += `<rect x="${x}" y="${y1}" width="${rectWidth}" height="${height}" rx="${rectWidth/2}" ry="${rectWidth/2}" fill="#f55d58" opacity="${opacity}" data-index="${i}" />`;
             });
@@ -2383,11 +2600,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const lineHeight = 4;
                     const lineY = currentMonth.y - lineHeight / 2;
                     
-                    // Add subtle shadow effect
-                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY + 1}" width="${lineWidth}" height="${lineHeight}" fill="rgba(0,0,0,0.1)" rx="2" opacity="0.3" />`;
-                    
-                    // Main line with rounded corners and gradient effect
-                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));" />`;
+                    // Main line with rounded corners (no shadow)
+                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" />`;
                 }
                 
                 // Third pass: draw trend indicators
@@ -2405,21 +2619,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const trendY = currentMonth.y;
                     const verticalOffset = isIncrease ? -8 : 15; // Above for increase, below for decrease
                     
-                    // Draw trend indicator
+                    // Draw trend indicator (clean, no background)
                     const symbol = isIncrease ? '+' : '-';
                     const absPercentChange = Math.abs(percentChange).toFixed(1);
-                    // Enhanced trend indicator with background and shadow
-                    const textBgWidth = (symbol + absPercentChange + '%').length * 6 + 8;
-                    const textBgHeight = 14;
-                    const textBgX = trendX - 2;
-                    const textBgY = trendY + verticalOffset - 10;
-                    
-                    // Background with rounded corners and shadow
-                    svg.innerHTML += `<rect x="${textBgX + 1}" y="${textBgY + 1}" width="${textBgWidth}" height="${textBgHeight}" fill="rgba(0,0,0,0.1)" rx="3" opacity="0.3" />`;
-                    svg.innerHTML += `<rect x="${textBgX}" y="${textBgY}" width="${textBgWidth}" height="${textBgHeight}" fill="rgba(0,0,0,0.8)" rx="3" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" />`;
-                    
-                    // Text with enhanced styling
-                    svg.innerHTML += `<text x="${trendX + 2}" y="${trendY + verticalOffset - 2}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start" style="text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${symbol}${absPercentChange}%</text>`;
+                    svg.innerHTML += `<text x="${trendX}" y="${trendY + verticalOffset}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start">${symbol}${absPercentChange}%</text>`;
                 }
             } else {
                 // For other views, use individual points and curves
@@ -2451,6 +2654,126 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     // Enhanced curve with gradient and shadow effects
                     svg.innerHTML += `<path d="${pathData}" stroke="url(#restingCurveGradient)" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 1px 3px rgba(135, 206, 235, 0.3));" />`;
+                }
+            }
+        }
+
+        // Handle regular heart rate selection (unified with resting heart rate display)
+        if (isRegularSelected && data.length > 0 && activeTimeRange !== '日') {
+            const barCount = data.length;
+            const barSpacing = chartInnerWidth / barCount;
+            
+            if (activeTimeRange === '半年') {
+                // For half-year view, group every 4 bars into a month and draw horizontal lines
+                const barsPerMonth = 4; // Assuming 4 weeks per month in half-year view
+                const monthCount = Math.ceil(barCount / barsPerMonth);
+                let monthlyAverages = [];
+                
+                // First pass: calculate all monthly averages
+                for (let monthIndex = 0; monthIndex < monthCount; monthIndex++) {
+                    const startBarIndex = monthIndex * barsPerMonth;
+                    const endBarIndex = Math.min(startBarIndex + barsPerMonth, barCount);
+                    
+                    // Calculate average regular heart rate for this month
+                    let monthRegularRateSum = 0;
+                    let validBars = 0;
+                    
+                    for (let i = startBarIndex; i < endBarIndex; i++) {
+                        if (data[i] && data[i].min && data[i].max) {
+                            const regularRate = Math.round((data[i].min + data[i].max) / 2 + Math.random() * 15); // Slightly higher than resting
+                            monthRegularRateSum += regularRate;
+                            validBars++;
+                        }
+                    }
+                    
+                    if (validBars > 0) {
+                        const avgRegularRate = monthRegularRateSum / validBars;
+                        const y = yScale(avgRegularRate);
+                        
+                        // Store monthly data for trend calculation
+                        monthlyAverages.push({
+                            monthIndex,
+                            avgRegularRate,
+                            y,
+                            startX: chartPadding.left + startBarIndex * barSpacing,
+                            endX: chartPadding.left + endBarIndex * barSpacing,
+                            centerX: chartPadding.left + (startBarIndex + endBarIndex) * barSpacing / 2
+                        });
+                    }
+                }
+                
+                // Second pass: draw lines with appropriate colors based on trends
+                for (let i = 0; i < monthlyAverages.length; i++) {
+                    const currentMonth = monthlyAverages[i];
+                    let lineColor = '#ffffff'; // Default white for first month
+                    
+                    // Determine line color based on trend from previous month
+                    if (i > 0) {
+                        const prevMonth = monthlyAverages[i - 1];
+                        const percentChange = ((currentMonth.avgRegularRate - prevMonth.avgRegularRate) / prevMonth.avgRegularRate) * 100;
+                        const isIncrease = percentChange > 0;
+                        lineColor = isIncrease ? '#ff4444' : '#4caf50'; // Red for increase, green for decrease
+                    }
+                    
+                    // Draw horizontal line with trend-based color
+                    // Create rounded line using rect with rounded corners for better design
+                    const lineWidth = currentMonth.endX - currentMonth.startX;
+                    const lineHeight = 4;
+                    const lineY = currentMonth.y - lineHeight / 2;
+                    
+                    // Main line with rounded corners (no shadow)
+                    svg.innerHTML += `<rect x="${currentMonth.startX}" y="${lineY}" width="${lineWidth}" height="${lineHeight}" fill="${lineColor}" rx="2" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" opacity="0.95" />`;
+                }
+                
+                // Third pass: draw trend indicators
+                for (let i = 1; i < monthlyAverages.length; i++) {
+                    const prevMonth = monthlyAverages[i - 1];
+                    const currentMonth = monthlyAverages[i];
+                    
+                    // Calculate percentage change
+                    const percentChange = ((currentMonth.avgRegularRate - prevMonth.avgRegularRate) / prevMonth.avgRegularRate) * 100;
+                    const isIncrease = percentChange > 0;
+                    const color = isIncrease ? '#ff4444' : '#4caf50'; // Red for increase, green for decrease
+                    
+                    // Position trend indicator at the start of the second line
+                    const trendX = currentMonth.startX;
+                    const trendY = currentMonth.y;
+                    const verticalOffset = isIncrease ? -8 : 15; // Above for increase, below for decrease
+                    
+                    // Draw trend indicator (clean, no background)
+                    const symbol = isIncrease ? '+' : '-';
+                    const absPercentChange = Math.abs(percentChange).toFixed(1);
+                    svg.innerHTML += `<text x="${trendX}" y="${trendY + verticalOffset}" fill="${color}" font-size="10" font-weight="bold" text-anchor="start">${symbol}${absPercentChange}%</text>`;
+                }
+            } else {
+                // For other views, use individual points and curves
+                let regularPoints = [];
+                
+                data.forEach((d, i) => {
+                    // Calculate regular heart rate as average of min and max, with some variation
+                    const regularRate = Math.round((d.min + d.max) / 2 + Math.random() * 15); // Slightly higher than resting
+                    const rectWidth = Math.max(2, barSpacing * 0.35);
+                    const x = chartPadding.left + i * barSpacing + (barSpacing - rectWidth) / 2 + rectWidth / 2;
+                    const y = yScale(regularRate);
+                    
+                    // Store point for curve drawing
+                    regularPoints.push({x, y});
+                    
+                    // Add regular heart rate point for other views with green gradient
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="4" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.95" style="filter: drop-shadow(0 1px 4px rgba(76, 175, 80, 0.4));" />`;
+                });
+                
+                // Draw curve connecting all regular heart rate points
+                if (regularPoints.length > 1) {
+                    let pathData = `M${regularPoints[0].x},${regularPoints[0].y}`;
+                    for (let i = 1; i < regularPoints.length; i++) {
+                        const prevPoint = regularPoints[i - 1];
+                        const currentPoint = regularPoints[i];
+                        const controlPointX = (prevPoint.x + currentPoint.x) / 2;
+                        pathData += ` Q${controlPointX},${prevPoint.y} ${currentPoint.x},${currentPoint.y}`;
+                    }
+                    // Enhanced curve with green gradient and shadow effects
+                    svg.innerHTML += `<path d="${pathData}" stroke="url(#regularCurveGradient)" stroke-width="3" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 1px 3px rgba(76, 175, 80, 0.3));" />`;
                 }
             }
         }
