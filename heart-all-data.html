@@ -1969,8 +1969,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                     // Add resting heart rate point for other views
                     // Enhanced circle with gradient and glow effect
-                    const restingPointRadius = (activeTimeRange === '月') ? 2.0 : 2.4;
-                    const restingPointStrokeW = (activeTimeRange === '月') ? 1.0 : 1.2;
+                    const restingPointRadius = (activeTimeRange === '月') ? 1.6 : 2.4;
+                    const restingPointStrokeW = (activeTimeRange === '月') ? 0.8 : 1.2;
                     svg.innerHTML += `<circle cx="${x}" cy="${y}" r="${restingPointRadius}" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="${restingPointStrokeW}" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(135, 206, 235, 0.3));" />`;
             });
             
@@ -2091,8 +2091,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     regularPoints.push({x, y});
                     
                     // Add regular heart rate point for other views with green gradient
-                    const regularPointRadius = (activeTimeRange === '月') ? 2.0 : 2.4;
-                    const regularPointStrokeW = (activeTimeRange === '月') ? 1.0 : 1.2;
+                    const regularPointRadius = (activeTimeRange === '月') ? 1.6 : 2.4;
+                    const regularPointStrokeW = (activeTimeRange === '月') ? 0.8 : 1.2;
                     svg.innerHTML += `<circle cx="${x}" cy="${y}" r="${regularPointRadius}" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="${regularPointStrokeW}" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(76, 175, 80, 0.3));" />`;
                 });
                 
