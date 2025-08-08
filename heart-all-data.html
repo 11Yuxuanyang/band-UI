@@ -2222,7 +2222,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                     // Add resting heart rate point for other views
                     // Enhanced circle with gradient and glow effect
-                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="4" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.95" style="filter: drop-shadow(0 1px 4px rgba(135, 206, 235, 0.4));" />`;
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="3" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" opacity="0.95" style="filter: drop-shadow(0 1px 3px rgba(135, 206, 235, 0.35));" />`;
             });
             
             // Draw curve connecting all resting heart rate points
@@ -2342,7 +2342,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     regularPoints.push({x, y});
                     
                     // Add regular heart rate point for other views with green gradient
-                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="4" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.95" style="filter: drop-shadow(0 1px 4px rgba(76, 175, 80, 0.4));" />`;
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="3" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" opacity="0.95" style="filter: drop-shadow(0 1px 3px rgba(76, 175, 80, 0.35));" />`;
                 });
                 
                 // Draw curve connecting all regular heart rate points
@@ -2392,9 +2392,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            svg.innerHTML += `<circle cx="${maxPos.x}" cy="${maxPos.y}" r="4" fill="#ffca28" stroke="white" stroke-width="2" />`;
+            svg.innerHTML += `<circle cx="${maxPos.x}" cy="${maxPos.y}" r="3" fill="#ffca28" stroke="white" stroke-width="1.5" />`;
             svg.innerHTML += `<text x="${maxPos.x}" y="${maxPos.y - 10}" fill="white" font-size="12" font-weight="bold" text-anchor="middle">${Math.round(overallMax)}</text>`;
-            svg.innerHTML += `<circle cx="${minPos.x}" cy="${minPos.y}" r="4" fill="#28a7ff" stroke="white" stroke-width="2" />`;
+            svg.innerHTML += `<circle cx="${minPos.x}" cy="${minPos.y}" r="3" fill="#28a7ff" stroke="white" stroke-width="1.5" />`;
             svg.innerHTML += `<text x="${minPos.x}" y="${minPos.y + 15}" fill="white" font-size="12" font-weight="bold" text-anchor="middle">${Math.round(overallMin)}</text>`;
         }
     }
@@ -2985,7 +2985,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                     // Add resting heart rate point for other views
                     // Enhanced circle with gradient and glow effect
-                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="4" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="2" opacity="0.95" style="filter: drop-shadow(0 1px 4px rgba(135, 206, 235, 0.4));" />`;
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="3" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" opacity="0.95" style="filter: drop-shadow(0 1px 3px rgba(135, 206, 235, 0.35));" />`;
             });
             
             // Draw curve connecting all resting heart rate points
