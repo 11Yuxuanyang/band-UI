@@ -1046,157 +1046,7 @@
             text-shadow: 0 0 15px rgba(0, 122, 255, 0.5);
         }
         
-        /* 右侧添加数据区域样式 */
-        .add-data-section-sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 280px;
-            height: 100vh;
-            background: var(--bg-color);
-            border-left: 1px solid var(--border-color);
-            overflow-y: auto;
-            z-index: 1000;
-            padding: 80px 20px 20px 20px;
-            box-sizing: border-box;
-        }
-        
-        .add-data-header {
-            margin-bottom: 20px;
-        }
-        
-        .add-data-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--text-primary);
-            margin: 0;
-        }
-        
-        .add-data-content {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .add-data-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .add-data-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .add-data-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-color: var(--accent-blue);
-        }
-        
-        .add-data-icon-container {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        
-        .add-data-icon-container.heart-rate {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-        
-        .add-data-icon-container.resting {
-            background: rgba(59, 130, 246, 0.1);
-            color: #3b82f6;
-        }
-        
-        .add-data-icon-container.walking {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-        }
-        
-        .add-data-icon-container.variability {
-            background: rgba(168, 85, 247, 0.1);
-            color: #a855f7;
-        }
-        
-        .add-data-icon-container.ecg {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
-        }
-        
-        .add-data-icon {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .add-data-info {
-            flex: 1;
-            min-width: 0;
-        }
-        
-        .add-data-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 4px 0;
-        }
-        
-        .add-data-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 0;
-        }
-        
-        .add-data-arrow {
-            width: 20px;
-            height: 20px;
-            color: var(--text-tertiary);
-            flex-shrink: 0;
-        }
-        
-        .add-data-info-section {
-            display: flex;
-            gap: 12px;
-            padding: 16px;
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-        
-        .add-data-info-icon {
-            width: 24px;
-            height: 24px;
-            color: #3b82f6;
-            flex-shrink: 0;
-        }
-        
-        .add-data-info-text h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 8px 0;
-        }
-        
-        .add-data-info-text p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 0;
-            line-height: 1.4;
-        }
+        /* 右侧添加数据区域样式（已移除对应 DOM） */
         
         /* 添加数据页面样式 */
         .add-data-page {
@@ -1429,112 +1279,7 @@
             </div>
         </div>
             
-            <!-- 右侧添加数据区域 -->
-            <!-- 右侧添加数据区域迁移到 add-data.html，此处隐藏以避免重复 -->
-            <div class="add-data-section-sidebar" style="display:none;">
-                <div class="add-data-header">
-                    <h2 class="add-data-title">添加数据</h2>
-                </div>
-                <div class="add-data-content">
-                    <!-- 心率相关数据类型卡片 -->
-                    <div class="add-data-cards">
-                        
-                        <!-- 心率 -->
-                        <div class="add-data-card" onclick="addHeartRate()">
-                            <div class="add-data-icon-container heart-rate">
-                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                </svg>
-                            </div>
-                            <div class="add-data-info">
-                                <h3 class="add-data-name">心率</h3>
-                                <p class="add-data-desc">测量当前心率</p>
-                            </div>
-                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-
-                        <!-- 静息心率 -->
-                        <div class="add-data-card" onclick="addRestingHeartRate()">
-                            <div class="add-data-icon-container resting">
-                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2M21 9V7L15 1H9V3H15.5L20.5 8H15V10H22L21 9M7 13C8.1 13 9 13.9 9 15S8.1 17 7 17 5 16.1 5 15 5.9 13 7 13M17 13C18.1 13 19 13.9 19 15S18.1 17 17 17 15 16.1 15 15 15.9 13 17 13"/>
-                                </svg>
-                            </div>
-                            <div class="add-data-info">
-                                <h3 class="add-data-name">静息心率</h3>
-                                <p class="add-data-desc">安静状态下的心率</p>
-                            </div>
-                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-
-                        <!-- 步行平均心率 -->
-                        <div class="add-data-card" onclick="addWalkingHeartRate()">
-                            <div class="add-data-icon-container walking">
-                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M14,12L10.5,8.5L9.08,9.92L12.17,13L20.59,4.58L19.17,3.17L14,12Z"/>
-                                </svg>
-                            </div>
-                            <div class="add-data-info">
-                                <h3 class="add-data-name">步行平均心率</h3>
-                                <p class="add-data-desc">步行时的平均心率</p>
-                            </div>
-                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-
-                        <!-- 心率变异性 -->
-                        <div class="add-data-card" onclick="addHeartRateVariability()">
-                            <div class="add-data-icon-container variability">
-                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12M11,17H13V11H11V17M11,9H13V7H11V9Z"/>
-                                </svg>
-                            </div>
-                            <div class="add-data-info">
-                                <h3 class="add-data-name">心率变异性</h3>
-                                <p class="add-data-desc">心跳间隔的变化</p>
-                            </div>
-                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-
-                        <!-- 心电图 -->
-                        <div class="add-data-card" onclick="addECG()">
-                            <div class="add-data-icon-container ecg">
-                                <svg class="add-data-icon" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M3,13H4.5L6,10L8,16L10,4L12,20L14,8L15.5,13H21V11H16.5L15,8L13,14L11,6L9,18L7,12L5.5,11H3V13Z"/>
-                                </svg>
-                            </div>
-                            <div class="add-data-info">
-                                <h3 class="add-data-name">心电图</h3>
-                                <p class="add-data-desc">心脏电活动记录</p>
-                            </div>
-                            <svg class="add-data-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </div>
-                        
-                    </div>
-                    
-                    <!-- 信息提示 -->
-                    <div class="add-data-info-section">
-                        <div class="add-data-info-icon">
-                            <svg fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,17A1.5,1.5 0 0,1 10.5,15.5A1.5,1.5 0 0,1 12,14A1.5,1.5 0 0,1 13.5,15.5A1.5,1.5 0 0,1 12,17M12,10.5C12.8,10.5 13.5,9.8 13.5,9C13.5,8.2 12.8,7.5 12,7.5C11.2,7.5 10.5,8.2 10.5,9C10.5,9.8 11.2,10.5 12,10.5Z"/>
-                            </svg>
-                        </div>
-                        <div class="add-data-info-text">
-                            <h4>关于心率数据</h4>
-                            <p>您可以手动添加心率相关数据，或使用兼容的设备自动记录。这些数据将帮助您更好地了解心血管健康状况。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- 右侧添加数据区域（已删除） -->
         </div>
     </div>
 
@@ -2223,7 +1968,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                     // Add resting heart rate point for other views
                     // Enhanced circle with gradient and glow effect
-                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="3" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" opacity="0.95" style="filter: drop-shadow(0 1px 3px rgba(135, 206, 235, 0.35));" />`;
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2.4" fill="url(#restingPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(135, 206, 235, 0.3));" />`;
             });
             
             // Draw curve connecting all resting heart rate points
@@ -2343,7 +2088,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     regularPoints.push({x, y});
                     
                     // Add regular heart rate point for other views with green gradient
-                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="3" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" opacity="0.95" style="filter: drop-shadow(0 1px 3px rgba(76, 175, 80, 0.35));" />`;
+                    svg.innerHTML += `<circle cx="${x}" cy="${y}" r="2.4" fill="url(#regularPointGradient)" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" opacity="0.95" style="filter: drop-shadow(0 1px 2px rgba(76, 175, 80, 0.3));" />`;
                 });
                 
                 // Draw curve connecting all regular heart rate points
