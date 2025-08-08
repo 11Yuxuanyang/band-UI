@@ -1363,7 +1363,7 @@
                     返回
                 </a>
                 <span class="page-title">心率详情</span>
-                <a href="#/add" class="header-add-data">
+                <a href="add-data.html?from=heart" class="header-add-data">
                     <svg viewBox="0 0 24 24">
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" stroke="none" fill="currentColor"/>
                     </svg>
@@ -1430,7 +1430,8 @@
         </div>
             
             <!-- 右侧添加数据区域 -->
-            <div class="add-data-section-sidebar">
+            <!-- 右侧添加数据区域迁移到 add-data.html，此处隐藏以避免重复 -->
+            <div class="add-data-section-sidebar" style="display:none;">
                 <div class="add-data-header">
                     <h2 class="add-data-title">添加数据</h2>
                 </div>
@@ -3241,16 +3242,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const hash = window.location.hash;
         
         if (hash.startsWith('#/add')) {
-            // 解析查询参数
+            // 兼容旧路由：跳转到独立的添加页面
             const urlParams = new URLSearchParams(hash.split('?')[1] || '');
-            const type = urlParams.get('type');
-            
-            // 显示添加数据界面
-            showAddDataInterface(type);
-        } else {
-            // 默认显示心率详情界面
-            hideAddDataInterface();
+            const from = urlParams.get('type') || 'heart';
+            window.location.href = `add-data.html?from=${from}`;
+            return;
         }
+        // 默认显示心率详情界面
+        hideAddDataInterface();
     }
     
     // 显示添加数据界面
